@@ -38,12 +38,36 @@ export default function NavBar() {
 
 
             <div className="flex items-center gap-6 flex-1 justify-end">
-                <button className="btn btn-circle btn-ghost text-2xl hover:text-blue-600 cursor-pointer">
-                    <i className="fa-solid fa-bell"></i>
-                </button>
-                <button className="btn btn-circle btn-ghost text-2xl hover:text-blue-600 cursor-pointer">
-                    <i className="fa-solid fa-user-circle" />
-                </button>
+
+                <div className="dropdown">
+                    <div tabIndex={0} role="button" className="btn btn-circle btn-ghost text-2xl hover:text-blue-600 cursor-pointer">                     <i className="fa-solid fa-bell"></i>
+                    </div>
+                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li>Empty</li>
+                    </ul>
+                </div>
+                <div className="dropdown dropdown-end">
+                    <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                        <div className="w-10 rounded-full">
+                            <img
+                                alt="Tailwind CSS Navbar component"
+                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                        </div>
+                    </div>
+                    <ul
+                        tabIndex={0}
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        <li>
+                            <Link href={"/profile"}>
+                                <i className="justify-between">
+                                    Profile
+                                </i>
+                            </Link>
+                        </li>
+                        <li><i>Settings</i></li>
+                        <li><i>Logout</i></li>
+                    </ul>
+                </div>
             </div>
         </div>
     );
