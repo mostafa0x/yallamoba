@@ -4,8 +4,8 @@ const CounterSlices = createSlice({
   name: "CounterSlices",
   initialState: { Counter: 0 },
   reducers: {
-    Up: () => {
-      console.log("Up");
+    Up: (state, action) => {
+      state.Counter += action.payload;
     },
     Down: () => {
       console.log("Down");
