@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function SignUp() {
     const avatars = [
@@ -20,23 +20,40 @@ export default function SignUp() {
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxkadYM8KIeqFfPLX0Mxbys5bptoGzLuCGyw&s',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqqMT-IIvDRO98gGbcwEJ7-h6xWV-YRVUcyw&s'
     ];
-
+    const [AvatarAnmition, setAvatarAnmition] = useState(0)
     const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
 
     const handlePrev = () => {
         setCurrentAvatarIndex((prevIndex) =>
             prevIndex === 0 ? avatars.length - 1 : prevIndex - 1
         );
+        setAvatarAnmition(2)
+
     };
 
     const handleNext = () => {
         setCurrentAvatarIndex((prevIndex) =>
             prevIndex === avatars.length - 1 ? 0 : prevIndex + 1
+
         );
+        setAvatarAnmition(1)
     };
+    useEffect(() => {
+        if (AvatarAnmition !== 0) {
+            var AvaTime = setTimeout(() => {
+                setAvatarAnmition(0)
+            }, 250);
+
+        }
+
+        return () => {
+            clearTimeout(AvaTime)
+        }
+    }, [AvatarAnmition])
+
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 animate-fade-up animate-once">
             <form className="bg-white p-8 rounded shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Create a new account</h2>
 
@@ -112,7 +129,7 @@ export default function SignUp() {
                     <img
                         src={avatars[currentAvatarIndex]}
                         alt="Selected Avatar"
-                        className="w-20 h-20 object-cover rounded-full border"
+                        className={`w-20 h-20 object-cover rounded-full border ${AvatarAnmition === 2 ? "animate-fade-left animate-once" : ""} ${AvatarAnmition === 1 ? "animate-fade-right animate-once" : ""}`}
                     />
                     <button type="button" onClick={handleNext} className="text-lg font-bold">
                         <i className="fa-solid fa-arrow-right cursor-pointer text-3xl "></i>
