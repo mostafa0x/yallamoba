@@ -1,7 +1,7 @@
 import React from 'react'
 import PostCard from '../_components/PostCard/page'
 export default function Profile() {
-    return (<div className='my-12 mx-40 '>
+    return (<div className='my-12 mx-40 animate-fade-up animate-once '>
         <div className='flex justify-between border-b-2 pb-2 border-gray-400 items-center mb-12 '>
             <div className='flex flex-row gap-8 items-center'>
                 <div className="w-35">

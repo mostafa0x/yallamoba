@@ -1,5 +1,9 @@
 "use client"
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
+import { useFormik } from "formik"
+import * as yup from "yup"
+import { FormState } from "../../../InterFaces/FormState";
 
 export default function SignUp() {
     const avatars = [
@@ -23,6 +27,33 @@ export default function SignUp() {
     const [AvatarAnmition, setAvatarAnmition] = useState(0)
     const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
 
+    const validationSchema = yup.object().shape({
+        name: yup.string().min(6, "must be 6").max(12, "max 12").required("Required !"),
+        gender: yup.string().required("Required !"),
+        email: yup.string().email("Invild email").required("Required !"),
+        password: yup.string().min(8, "To Short").required("Required !"),
+        repassword: yup.string()
+            .oneOf([yup.ref('password')], "not same password")
+            .required("Required !"),
+        avatar: yup.string().required("Required !"),
+        role: yup.string().required("Required !")
+    })
+
+
+    const handleSignUp = (formValues: FormState) => { }
+
+    const Formik = useFormik({
+        initialValues: {
+            name: "",
+            gender: "",
+            email: "",
+            password: "",
+            repassword: "",
+            avatar: "",
+            role: "",
+        }, validationSchema, onSubmit: handleSignUp
+    })
+
     const handlePrev = () => {
         setCurrentAvatarIndex((prevIndex) =>
             prevIndex === 0 ? avatars.length - 1 : prevIndex - 1
@@ -39,13 +70,17 @@ export default function SignUp() {
         setAvatarAnmition(1)
     };
     useEffect(() => {
+        window.scroll(0, 0)
+    }, [])
+
+    useEffect(() => {
+        Formik.setFieldValue("avatar", avatars[currentAvatarIndex])
+
         if (AvatarAnmition !== 0) {
             var AvaTime = setTimeout(() => {
                 setAvatarAnmition(0)
             }, 250);
-
         }
-
         return () => {
             clearTimeout(AvaTime)
         }
@@ -54,62 +89,107 @@ export default function SignUp() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 animate-fade-up animate-once">
-            <form className="bg-white p-8 rounded shadow-md w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-6 text-center">Create a new account</h2>
+            <form onSubmit={Formik.handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
+                <h2 className="text-blue-600 text-2xl font-bold mb-6 text-center">Create a new account</h2>
 
                 {/* الاسم */}
-                <div className="flex gap-2 mb-4">
+                <div className="flex gap-2 ">
                     <input
                         type="text"
-                        name="firstName"
-                        placeholder="First name"
-                        className="w-1/2 px-3 py-2 border rounded"
-                        required
-                    />
-                    <input
-                        type="text"
-                        name="lastName"
-                        placeholder="Last name"
-                        className="w-1/2 px-3 py-2 border rounded"
+                        name="name"
+                        placeholder="Username in game"
+                        onChange={Formik.handleChange}
+                        onBlur={Formik.handleBlur}
+                        value={Formik.values.name}
+                        className="w-full px-3 py-2 border rounded"
                         required
                     />
                 </div>
+                <div className=' py-2'>
+                    {Formik.errors.name && Formik.touched.name ?
+                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.name}</label>
+                        : <label className='invisible '>hidden text</label>}
+                </div>
+
 
                 {/* الإيميل والباسورد */}
                 <input
                     type="text"
                     name="email"
                     placeholder="Email"
-                    className="w-full px-3 py-2 mb-4 border rounded"
+                    onChange={Formik.handleChange}
+                    onBlur={Formik.handleBlur}
+                    value={Formik.values.email}
+                    className="w-full px-3 py-2 border rounded"
                     required
                 />
+                <div className=' py-2'>
+                    {Formik.errors.email && Formik.touched.email ?
+                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.email}</label>
+                        : <label className='invisible '>hidden text</label>}
+                </div>
 
                 <input
                     type="password"
                     name="password"
                     placeholder="New password"
+                    onChange={Formik.handleChange}
+                    onBlur={Formik.handleBlur}
+                    value={Formik.values.password}
+                    className="w-full px-3 py-2  border rounded"
+                    required
+                />
+                <div className=' py-2'>
+                    {Formik.errors.password && Formik.touched.password ?
+                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.password}</label>
+                        : <label className='invisible '>hidden text</label>}
+                </div>
+                <input
+                    type="password"
+                    name="repassword"
+                    placeholder="New password"
+                    onChange={Formik.handleChange}
+                    onBlur={Formik.handleBlur}
+                    value={Formik.values.repassword}
                     className="w-full px-3 py-2 mb-4 border rounded"
                     required
                 />
+                <div className=' py-2'>
+                    {Formik.errors.repassword && Formik.touched.repassword ?
+                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.repassword}</label>
+                        : <label className='invisible '>hidden text</label>}
+                </div>
 
                 {/* الجندر */}
                 <label className="block text-sm mb-1">Gender</label>
-                <div className="flex justify-between mb-4 px-26">
+                <div className="flex justify-between  px-26">
                     <label className="flex items-center gap-2">
-                        <input type="radio" name="gender" value="male" required />
+                        <input type="radio" onChange={Formik.handleChange}
+                            onBlur={Formik.handleBlur}
+                            value={Formik.values.gender} name="gender" required />
                         Male
                     </label>
                     <label className="flex items-center gap-2">
-                        <input type="radio" name="gender" value="female" />
+                        <input type="radio" onChange={Formik.handleChange}
+                            onBlur={Formik.handleBlur}
+                            value={Formik.values.gender} name="gender" />
                         Female
                     </label>
+                </div>
+                <div className=' py-2'>
+                    {Formik.errors.gender && Formik.touched.gender ?
+                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.gender}</label>
+                        : <label className='invisible '>hidden text</label>}
                 </div>
 
                 {/* الرول */}
                 <label className="block text-sm mb-1">Your main role</label>
                 <select
                     name="role"
-                    className="w-full px-3 py-2 mb-4 border rounded"
+                    onChange={Formik.handleChange}
+                    onBlur={Formik.handleBlur}
+                    value={Formik.values.role}
+                    className="w-full px-3 py-2  border rounded"
                     required
                 >
                     <option value="">Select your role</option>
@@ -119,10 +199,15 @@ export default function SignUp() {
                     <option value="adc">MM</option>
                     <option value="support">Exp</option>
                 </select>
+                <div className=' py-2'>
+                    {Formik.errors.role && Formik.touched.role ?
+                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.role}</label>
+                        : <label className='invisible '>hidden text</label>}
+                </div>
 
                 {/* اختيار صورة البروفايل */}
                 <label className="block text-sm mb-2">Choose your profile picture</label>
-                <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="flex items-center justify-center gap-4 ">
                     <button type="button" onClick={handlePrev} className="text-lg font-bold">
                         <i className="fa-solid fa-arrow-left cursor-pointer text-3xl"></i>
                     </button>
@@ -135,6 +220,11 @@ export default function SignUp() {
                         <i className="fa-solid fa-arrow-right cursor-pointer text-3xl "></i>
                     </button>
                 </div>
+                <div className=' py-2'>
+                    {Formik.errors.avatar && Formik.touched.avatar ?
+                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.avatar}</label>
+                        : <label className='invisible '>hidden text</label>}
+                </div>
 
 
 
@@ -145,7 +235,15 @@ export default function SignUp() {
                 >
                     Sign Up
                 </button>
+                <div className='mt-6 border-t-2 border-gray-300'>
+                    <div className='flex justify-center text-center flex-row p-8'>
+                        <i>I have Account !  </i>
+                        <Link href={"/signin"}><p className='font-bold underline underline-offset-2 cursor-pointer'>  Sign In</p>
+                        </Link>
+                    </div>
+                </div>
             </form>
+
         </div>
     );
 }

@@ -14,7 +14,7 @@ export default function Home() {
     Dispatch(GetAllPosts())
   }, [])
   return <div>
-    <div className="flex justify-center text-center flex-col">
+    <div className="flex justify-center text-center flex-col animate-fade-up animate-once">
       <h1>hi </h1>
       <h2>{Counter}</h2>
       <button onClick={() => Dispatch(Up(1))} className="btn btn-info">Add</button>
