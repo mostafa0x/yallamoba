@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useFormik } from "formik"
 import * as yup from "yup"
 import { FormState } from "../../../InterFaces/FormState";
+import { useRouter } from 'next/navigation';
 
 export default function SignUp() {
     const avatars = [
@@ -26,6 +27,13 @@ export default function SignUp() {
     ];
     const [AvatarAnmition, setAvatarAnmition] = useState(0)
     const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
+    const [PageAnime, setPageAnime] = useState(false)
+    const Router = useRouter()
+
+    const handleGotoSignIn = () => {
+        setPageAnime(true)
+        Router.push("/signin")
+    }
 
     const validationSchema = yup.object().shape({
         name: yup.string().min(6, "must be 6").max(12, "max 12").required("Required !"),
@@ -71,6 +79,10 @@ export default function SignUp() {
     };
     useEffect(() => {
         window.scroll(0, 0)
+
+        return () => {
+            setPageAnime(false)
+        }
     }, [])
 
     useEffect(() => {
@@ -88,7 +100,7 @@ export default function SignUp() {
 
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 animate-fade-up animate-once">
+        <div className={`min-h-screen flex items-center justify-center bg-gray-100  ${PageAnime ? "animate-jump-out animate-once" : "animate-fade-up animate-once"}`}>
             <form onSubmit={Formik.handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
                 <h2 className="text-blue-600 text-2xl font-bold mb-6 text-center">Create a new account</h2>
 
@@ -107,8 +119,8 @@ export default function SignUp() {
                 </div>
                 <div className=' py-2'>
                     {Formik.errors.name && Formik.touched.name ?
-                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.name}</label>
-                        : <label className='invisible '>hidden text</label>}
+                        <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.name}</h1>
+                        : <h1 className='invisible '>hidden text</h1>}
                 </div>
 
 
@@ -125,8 +137,8 @@ export default function SignUp() {
                 />
                 <div className=' py-2'>
                     {Formik.errors.email && Formik.touched.email ?
-                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.email}</label>
-                        : <label className='invisible '>hidden text</label>}
+                        <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.email}</h1>
+                        : <h1 className='invisible '>hidden text</h1>}
                 </div>
 
                 <input
@@ -141,8 +153,8 @@ export default function SignUp() {
                 />
                 <div className=' py-2'>
                     {Formik.errors.password && Formik.touched.password ?
-                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.password}</label>
-                        : <label className='invisible '>hidden text</label>}
+                        <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.password}</h1>
+                        : <h1 className='invisible '>hidden text</h1>}
                 </div>
                 <input
                     type="password"
@@ -151,13 +163,13 @@ export default function SignUp() {
                     onChange={Formik.handleChange}
                     onBlur={Formik.handleBlur}
                     value={Formik.values.repassword}
-                    className="w-full px-3 py-2 mb-4 border rounded"
+                    className="w-full px-3 py-2 border rounded"
                     required
                 />
                 <div className=' py-2'>
                     {Formik.errors.repassword && Formik.touched.repassword ?
-                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.repassword}</label>
-                        : <label className='invisible '>hidden text</label>}
+                        <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.repassword}</h1>
+                        : <h1 className='invisible '>hidden text</h1>}
                 </div>
 
                 {/* الجندر */}
@@ -178,8 +190,8 @@ export default function SignUp() {
                 </div>
                 <div className=' py-2'>
                     {Formik.errors.gender && Formik.touched.gender ?
-                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.gender}</label>
-                        : <label className='invisible '>hidden text</label>}
+                        <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.gender}</h1>
+                        : <h1 className='invisible '>hidden text</h1>}
                 </div>
 
                 {/* الرول */}
@@ -201,8 +213,8 @@ export default function SignUp() {
                 </select>
                 <div className=' py-2'>
                     {Formik.errors.role && Formik.touched.role ?
-                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.role}</label>
-                        : <label className='invisible '>hidden text</label>}
+                        <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.role}</h1>
+                        : <h1 className='invisible '>hidden text</h1>}
                 </div>
 
                 {/* اختيار صورة البروفايل */}
@@ -222,8 +234,8 @@ export default function SignUp() {
                 </div>
                 <div className=' py-2'>
                     {Formik.errors.avatar && Formik.touched.avatar ?
-                        <label className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.avatar}</label>
-                        : <label className='invisible '>hidden text</label>}
+                        <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.avatar}</h1>
+                        : <h1 className='invisible '>hidden text</h1>}
                 </div>
 
 
@@ -238,8 +250,9 @@ export default function SignUp() {
                 <div className='mt-6 border-t-2 border-gray-300'>
                     <div className='flex justify-center text-center flex-row p-8'>
                         <i>I have Account !  </i>
-                        <Link href={"/signin"}><p className='font-bold underline underline-offset-2 cursor-pointer'>  Sign In</p>
-                        </Link>
+                        {/* <Link href={"/signin"}><p className='font-bold underline underline-offset-2 cursor-pointer'>  Sign In</p>
+                        </Link> */}
+                        <p onClick={() => handleGotoSignIn()} className='font-bold underline underline-offset-2 cursor-pointer'>  Sign In</p>
                     </div>
                 </div>
             </form>
