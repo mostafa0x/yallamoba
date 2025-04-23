@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
-
+import { useSelector } from 'react-redux';
+import { StateFaces } from '../../../../InterFaces/StateFaces';
 export default function NavBar() {
     const Path = usePathname();
+    const { UserToken, UserData } = useSelector((state: StateFaces) => state.UserReducer)
 
     useEffect(() => {
     }, []);
@@ -35,8 +37,8 @@ export default function NavBar() {
                 </div> */}
             </div>
 
-
-            <div className="flex items-center gap-6 flex-1 justify-end">
+            {/*دا الجزء الاخير بيخص صوره البروفيل والاشعارت و شكله بعد التسجيل وقبل */}
+            {UserToken ? <div className="flex items-center gap-6 flex-1 justify-end">
 
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-circle btn-ghost text-2xl hover:text-blue-600 cursor-pointer">                     <i className="fa-solid fa-bell"></i>
@@ -67,7 +69,11 @@ export default function NavBar() {
                         <li><i>Logout</i></li>
                     </ul>
                 </div>
-            </div>
+            </div> : <div className='flex justify-end gap-3'>
+                <Link href={"/signin"}><button className='btn btn-primary'>Login</button></Link>
+                <Link href={"/signup"}><button className='btn text-white bg-green-500'>Sign up</button></Link>
+            </div>}
+
         </div>
     );
 }

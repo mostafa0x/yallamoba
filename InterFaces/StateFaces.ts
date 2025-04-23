@@ -1,3 +1,5 @@
+import { UserSlices } from "./UserSlices";
+
 export interface StateFaces {
   CounterReducer: {
     Counter: number;
@@ -5,4 +7,5 @@ export interface StateFaces {
   PostsReducer: {
     AllPosts: [];
   };
+  UserReducer: UserSlices;
 }
