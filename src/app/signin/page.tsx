@@ -5,12 +5,13 @@ import { useFormik } from "formik"
 import * as yup from "yup"
 import { FormState } from "../../../InterFaces/FormState";
 import { useRouter } from "next/navigation";
+import { truncate } from "node:fs";
 
 
 export default function Login() {
     const Router = useRouter()
     const [PageAnmie, setPageAnmie] = useState(false)
-
+    const [BtnLogin, setBtnLogin] = useState(false)
 
     const validationSchema = yup.object().shape({
         email: yup.string().email("Invild email").required("Required !"),
@@ -19,12 +20,16 @@ export default function Login() {
 
     const handleGoToSignUp = () => {
         setPageAnmie(true)
-        // window.scroll(0, 0)
         Router.push("/signup")
 
     }
 
-    const handleLogin = (formValues: FormState) => { }
+    const handleLogin = async (formValues: FormState) => {
+        if (!BtnLogin) {
+            setBtnLogin(true)
+            console.log(formValues);
+        }
+    }
 
     const Formik = useFormik({
         initialValues: {
@@ -38,6 +43,7 @@ export default function Login() {
 
         return () => {
             setPageAnmie(false)
+            setBtnLogin(false)
         }
     }, [])
 
@@ -50,7 +56,7 @@ export default function Login() {
 
                     <form onSubmit={Formik.handleSubmit} className="flex flex-col space-y-4">
                         <input
-                            type="text"
+                            type="email"
                             placeholder="email"
                             name="email"
                             value={Formik.values.email}
@@ -58,6 +64,7 @@ export default function Login() {
                             onBlur={Formik.handleBlur}
                             className="border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
+                            autoComplete="email"
                         />
                         {Formik.errors.email && Formik.touched.email ? <label className="text-red-600 opacity-70 animate-shake animate-once">{Formik.errors.email}</label> : null}
                         <input
@@ -69,6 +76,7 @@ export default function Login() {
                             onBlur={Formik.handleBlur}
                             className="border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
+                            autoComplete="current-password"
                         />
                         {Formik.errors.password && Formik.touched.password ? <label className="text-red-600 opacity-70 animate-shake animate-once">{Formik.errors.password}</label> : null}
 
@@ -77,7 +85,7 @@ export default function Login() {
                             type="submit"
                             className="bg-blue-600 text-white rounded-md py-2 font-bold cursor-pointer hover:bg-blue-700"
                         >
-                            Login
+                            {BtnLogin ? "Loading..." : "Login"}
                         </button>
                     </form>
 

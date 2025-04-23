@@ -28,6 +28,7 @@ export default function SignUp() {
     const [AvatarAnmition, setAvatarAnmition] = useState(0)
     const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
     const [PageAnime, setPageAnime] = useState(false)
+    const [BtnSignUp, setBtnSignUp] = useState(false)
     const Router = useRouter()
 
     const handleGotoSignIn = () => {
@@ -48,7 +49,13 @@ export default function SignUp() {
     })
 
 
-    const handleSignUp = (formValues: FormState) => { }
+    async function handleSignUp(formValues: FormState) {
+        if (!BtnSignUp) {
+            await setBtnSignUp(true)
+            return console.log(formValues);
+
+        }
+    }
 
     const Formik = useFormik({
         initialValues: {
@@ -115,6 +122,7 @@ export default function SignUp() {
                         value={Formik.values.name}
                         className="w-full px-3 py-2 border rounded"
                         required
+                        autoComplete='username'
                     />
                 </div>
                 <div className=' py-2'>
@@ -126,7 +134,7 @@ export default function SignUp() {
 
                 {/* الإيميل والباسورد */}
                 <input
-                    type="text"
+                    type="email"
                     name="email"
                     placeholder="Email"
                     onChange={Formik.handleChange}
@@ -134,6 +142,8 @@ export default function SignUp() {
                     value={Formik.values.email}
                     className="w-full px-3 py-2 border rounded"
                     required
+                    autoComplete='email'
+
                 />
                 <div className=' py-2'>
                     {Formik.errors.email && Formik.touched.email ?
@@ -150,6 +160,7 @@ export default function SignUp() {
                     value={Formik.values.password}
                     className="w-full px-3 py-2  border rounded"
                     required
+                    autoComplete='new-password'
                 />
                 <div className=' py-2'>
                     {Formik.errors.password && Formik.touched.password ?
@@ -165,6 +176,7 @@ export default function SignUp() {
                     value={Formik.values.repassword}
                     className="w-full px-3 py-2 border rounded"
                     required
+                    autoComplete='new-password'
                 />
                 <div className=' py-2'>
                     {Formik.errors.repassword && Formik.touched.repassword ?
@@ -176,14 +188,14 @@ export default function SignUp() {
                 <label className="block text-sm mb-1">Gender</label>
                 <div className="flex justify-between  px-26">
                     <label className="flex items-center gap-2">
-                        <input type="radio" onChange={Formik.handleChange}
-                            onBlur={Formik.handleBlur}
+                        <input type="radio" onChange={() => Formik.setFieldValue("gender", "Male")}
+
                             value={Formik.values.gender} name="gender" required />
                         Male
                     </label>
                     <label className="flex items-center gap-2">
-                        <input type="radio" onChange={Formik.handleChange}
-                            onBlur={Formik.handleBlur}
+                        <input type="radio" onChange={() => Formik.setFieldValue("gender", "Female")}
+
                             value={Formik.values.gender} name="gender" />
                         Female
                     </label>
@@ -205,11 +217,11 @@ export default function SignUp() {
                     required
                 >
                     <option value="">Select your role</option>
-                    <option value="top">Roam</option>
-                    <option value="jungle">Jungle</option>
-                    <option value="mid">Mid</option>
-                    <option value="adc">MM</option>
-                    <option value="support">Exp</option>
+                    <option value="Roam">Roam</option>
+                    <option value="Jungle">Jungle</option>
+                    <option value="Mid">Mid</option>
+                    <option value="MM">MM</option>
+                    <option value="Exp">Exp</option>
                 </select>
                 <div className=' py-2'>
                     {Formik.errors.role && Formik.touched.role ?
@@ -243,13 +255,13 @@ export default function SignUp() {
                 {/* الزر */}
                 <button
                     type="submit"
-                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded"
+                    className="w-full cursor-pointer bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded"
                 >
-                    Sign Up
+                    {BtnSignUp ? "Loading.." : "Sign up"}
                 </button>
                 <div className='mt-6 border-t-2 border-gray-300'>
-                    <div className='flex justify-center text-center flex-row p-8'>
-                        <i>I have Account !  </i>
+                    <div className='flex justify-center items-center text-center flex-row p-8'>
+                        <i className='text-xs text-center'>I have Account !  </i>
                         {/* <Link href={"/signin"}><p className='font-bold underline underline-offset-2 cursor-pointer'>  Sign In</p>
                         </Link> */}
                         <p onClick={() => handleGotoSignIn()} className='font-bold underline underline-offset-2 cursor-pointer'>  Sign In</p>

@@ -6,7 +6,6 @@ export default function NavBar() {
     const Path = usePathname();
 
     useEffect(() => {
-        console.log(Path);
     }, []);
 
     return (
