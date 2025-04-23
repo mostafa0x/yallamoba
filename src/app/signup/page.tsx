@@ -255,8 +255,7 @@ export default function SignUp() {
                 {/* الزر */}
                 <button
                     type="submit"
-                    className="w-full cursor-pointer bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded"
-                >
+                    className={`w-full  bg-green-600  ${BtnSignUp ? "cursor-wait" : "cursor-pointer"} hover:bg-green-700 text-white font-semibold py-2 rounded`}>
                     {BtnSignUp ? "Loading.." : "Sign up"}
                 </button>
                 <div className='mt-6 border-t-2 border-gray-300'>

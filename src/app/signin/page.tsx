@@ -83,7 +83,7 @@ export default function Login() {
 
                         <button
                             type="submit"
-                            className="bg-blue-600 text-white rounded-md py-2 font-bold cursor-pointer hover:bg-blue-700"
+                            className={`bg-blue-600 text-white rounded-md py-2 font-bold ${BtnLogin ? "cursor-wait" : "cursor-pointer"} hover:bg-blue-700`}
                         >
                             {BtnLogin ? "Loading..." : "Login"}
                         </button>
