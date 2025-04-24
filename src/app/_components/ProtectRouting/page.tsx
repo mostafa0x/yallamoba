@@ -15,6 +15,11 @@ export default function ProtectRouting({ children }: any) {
                 Router.push("/signin")
             }
         }
+        if (Path === "/signup" || Path === "/signin") {
+            if (UserToken) {
+                Router.push("/")
+            }
+        }
 
     }, [Path])
 

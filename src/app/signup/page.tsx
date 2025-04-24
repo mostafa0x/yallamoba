@@ -5,6 +5,9 @@ import { useFormik } from "formik"
 import * as yup from "yup"
 import { FormState } from "../../../InterFaces/FormState";
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { StateFaces } from '../../../InterFaces/StateFaces';
+import SpinnerLoader from '../_components/SpinnerLoader/page';
 
 export default function SignUp() {
     const avatars = [
@@ -30,6 +33,7 @@ export default function SignUp() {
     const [PageAnime, setPageAnime] = useState(false)
     const [BtnSignUp, setBtnSignUp] = useState(false)
     const Router = useRouter()
+    const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
 
     const handleGotoSignIn = () => {
         setPageAnime(true)
@@ -105,6 +109,9 @@ export default function SignUp() {
         }
     }, [AvatarAnmition])
 
+    if (UserToken) {
+        return <SpinnerLoader />
+    }
 
     return (
         <div className={`min-h-screen flex items-center justify-center bg-gray-100  ${PageAnime ? "animate-jump-out animate-once" : "animate-fade-up animate-once"}`}>

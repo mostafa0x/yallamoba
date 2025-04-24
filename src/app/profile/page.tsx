@@ -1,18 +1,36 @@
+"use client"
 import React from 'react'
 import PostCard from '../_components/PostCard/page'
+import { useSelector } from 'react-redux'
+import { StateFaces } from '../../../InterFaces/StateFaces'
+import SpinnerLoader from '../_components/SpinnerLoader/page'
+
 
 export default function Profile() {
+
+    const { UserToken, UserData } = useSelector((state: StateFaces) => state.UserReducer)
+
+
+
+    if (!UserToken) {
+        return <SpinnerLoader />
+    }
+
     return (<div className='my-12 mx-40 animate-fade-up animate-once '>
         <div className='flex justify-between border-b-2 pb-2 border-gray-400 items-center mb-12 '>
             <div className='flex flex-row gap-8 items-center'>
                 <div className="w-35">
                     <img className='rounded-full'
-                        alt="Tailwind CSS Navbar component"
-                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                        alt="User Avatar"
+                        src={UserData.Avatar ?? "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} />
                 </div>
                 <div className='flex flex-col'>
-                    <h1 className='text-4xl'>Player Name</h1>
-                    <h4 className='text-xl opacity-50'>Friends : 999</h4></div>
+                    <div className='flex flex-row'>
+                        <h1 className='text-4xl'>{UserData.Username ?? "Player Name"}</h1>
+                        <i className='pl-4 font-bold'>{UserData.Gender === "Mele" ? "M" : "F"}</i>
+
+                    </div>
+                    <h4 className='text-xl opacity-50'>Friends : {UserData.Friends}</h4></div>
             </div>
             <div className='mr-32'>
                 <button className='btn btn-primary'> Edit Profile</button>

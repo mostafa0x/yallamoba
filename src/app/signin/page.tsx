@@ -5,13 +5,17 @@ import { useFormik } from "formik"
 import * as yup from "yup"
 import { FormState } from "../../../InterFaces/FormState";
 import { useRouter } from "next/navigation";
-import { truncate } from "node:fs";
+import { useSelector } from 'react-redux';
+import { StateFaces } from '../../../InterFaces/StateFaces';
+import SpinnerLoader from '../_components/SpinnerLoader/page';
 
 
 export default function Login() {
     const Router = useRouter()
     const [PageAnmie, setPageAnmie] = useState(false)
     const [BtnLogin, setBtnLogin] = useState(false)
+    const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
+
 
     const validationSchema = yup.object().shape({
         email: yup.string().email("Invild email").required("Required !"),
@@ -46,6 +50,10 @@ export default function Login() {
             setBtnLogin(false)
         }
     }, [])
+
+    if (UserToken) {
+        return <SpinnerLoader />
+    }
 
     return (
         <div>
