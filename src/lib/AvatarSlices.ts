@@ -31,7 +31,6 @@ const AvatarSlices = createSlice({
           state.currentAvatarIndex === 0
             ? state.avatars.length - 1
             : state.currentAvatarIndex - 1;
-        // setAvatarAnmition(2);
         state.AvatarAnmition = 2;
       } else {
         state.currentAvatarIndex =
@@ -39,7 +38,6 @@ const AvatarSlices = createSlice({
             ? 0
             : state.currentAvatarIndex + 1;
         state.AvatarAnmition = 1;
-        // setAvatarAnmition(1);
       }
     },
     setAvatarAnmition: (state, action) => {

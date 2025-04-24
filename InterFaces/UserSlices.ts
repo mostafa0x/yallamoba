@@ -5,7 +5,7 @@ export interface UserSlices {
     Avatar: null | string;
     Role: null | string;
     Gender: null | string;
-    email: null | string;
+    Email: null | string;
     Friends: number;
   };
 }

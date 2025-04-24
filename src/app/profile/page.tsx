@@ -1,19 +1,23 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import PostCard from '../_components/PostCard/page'
 import { useSelector } from 'react-redux'
 import { StateFaces } from '../../../InterFaces/StateFaces'
 import SpinnerLoader from '../_components/SpinnerLoader/page'
-
+import EditProfile from '../_components/EditProfile/page'
 
 export default function Profile() {
-
+    const [EditProfileBool, setEditProfileBool] = useState(false)
     const { UserToken, UserData } = useSelector((state: StateFaces) => state.UserReducer)
 
 
 
     if (!UserToken) {
         return <SpinnerLoader />
+    }
+
+    if (EditProfileBool) {
+        return <EditProfile />
     }
 
     return (<div className='my-12 mx-40 animate-fade-up animate-once '>
@@ -33,7 +37,7 @@ export default function Profile() {
                     <h4 className='text-xl opacity-50'>Friends : {UserData.Friends}</h4></div>
             </div>
             <div className='mr-32'>
-                <button className='btn btn-primary'> Edit Profile</button>
+                <button onClick={() => setEditProfileBool(true)} className='btn btn-primary'> Edit Profile</button>
             </div>
 
         </div>
@@ -43,7 +47,7 @@ export default function Profile() {
                     <img
                         className="rounded-full w-full h-full object-cover"
                         alt="User Avatar"
-                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                        src={UserData.Avatar ?? "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
                     />
                 </div>
                 <input
