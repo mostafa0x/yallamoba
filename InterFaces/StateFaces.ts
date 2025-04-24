@@ -8,4 +8,9 @@ export interface StateFaces {
     AllPosts: [];
   };
   UserReducer: UserSlices;
+  AvatarReducer: {
+    avatars: string[];
+    currentAvatarIndex: number;
+    AvatarAnmition: number;
+  };
 }
