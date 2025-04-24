@@ -1,0 +1,2 @@
+* add Spinner loader for proflie page
+* Toast for mine notfic
