@@ -14,7 +14,7 @@ export default function NavBar() {
     return (
         <div className="relative flex items-center justify-between pb-1 mt-2 px-6 bg-white shadow-md border-b-2 border-gray-200">
             <div className="flex items-center gap-4 flex-1">
-                <Link href={"/"}><MainLogo /></Link>
+                <Link href={"/"}><MainLogo size={"text-4xl"} /></Link>
                 <input
                     type="text"
                     className="input input-bordered input-sm w-64"
@@ -70,7 +70,7 @@ export default function NavBar() {
                         <li><i>Logout</i></li>
                     </ul>
                 </div>
-            </div> : <div className='flex justify-end gap-3'>
+            </div> : <div className='flex justify-end gap-3 animate-fade-down animate-once'>
                 <Link href={"/signin"}><button className='btn btn-primary'>Login</button></Link>
                 <Link href={"/signup"}><button className='btn text-white bg-green-500'>Sign up</button></Link>
             </div>}
