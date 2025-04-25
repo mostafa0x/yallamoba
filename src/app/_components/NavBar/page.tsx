@@ -3,6 +3,7 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { StateFaces } from '../../../../InterFaces/StateFaces';
+import MainLogo from '../MainLogo/page';
 export default function NavBar() {
     const Path = usePathname();
     const { UserToken, UserData } = useSelector((state: StateFaces) => state.UserReducer)
@@ -13,7 +14,7 @@ export default function NavBar() {
     return (
         <div className="relative flex items-center justify-between pb-1 mt-2 px-6 bg-white shadow-md border-b-2 border-gray-200">
             <div className="flex items-center gap-4 flex-1">
-                <Link href={"/"}><i className="fa-solid fa-gamepad text-3xl text-blue-600" /></Link>
+                <Link href={"/"}><MainLogo /></Link>
                 <input
                     type="text"
                     className="input input-bordered input-sm w-64"
