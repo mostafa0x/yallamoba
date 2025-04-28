@@ -20,6 +20,7 @@ export default function Login() {
     const [BtnLogin, setBtnLogin] = useState(false)
     const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
     const Dispath = useDispatch()
+    const [resError, setresError] = useState(null)
 
 
     const validationSchema = yup.object().shape({
@@ -35,6 +36,8 @@ export default function Login() {
 
     const handleLogin = async (formValues: FormState) => {
         if (!BtnLogin) {
+            const WaitingToast = toast.loading("Waiting...")
+            setresError(null)
             setBtnLogin(true)
             try {
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues)
@@ -45,11 +48,11 @@ export default function Login() {
             } catch (err: any) {
                 console.log(err);
                 setBtnLogin(false)
+                setresError(err.response.data.error)
                 toast.error(err.response.data.error)
 
             } finally {
-                // Router.replace("/")
-                // setBtnLogin(false)
+                toast.dismiss(WaitingToast)
 
             }
         }
@@ -119,6 +122,9 @@ export default function Login() {
                             </>
                                 : "Login"}
                         </button>
+                        {resError ? <div className="flex justify-center text-center">
+                            <h1 className=" text-error text-lg">{resError}</h1>
+                        </div> : null}
                     </form>
 
                     <div className="text-center mt-4">

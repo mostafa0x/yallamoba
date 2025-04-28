@@ -11,14 +11,17 @@ import SpinnerLoader from '../_components/SpinnerLoader/page';
 import RoleSelector from '../_components/RoleSelector/page';
 import { setCurrentAvatarIndex, setAvatarAnmition } from '@/lib/AvatarSlices';
 import AvatarIcons from '../_components/AvatarIcons/page';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import dotenv from "dotenv"
 import { Logging } from '@/lib/UserSlices';
+import { toast } from 'react-toastify';
 dotenv.config()
 
 export default function SignUp() {
     const [PageAnime, setPageAnime] = useState(false)
     const [BtnSignUp, setBtnSignUp] = useState(false)
+    const [resError, setresError] = useState(null)
+
     const Router = useRouter()
     const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
     const { avatars, currentAvatarIndex, AvatarAnmition } = useSelector((state: StateFaces) => state.AvatarReducer)
@@ -43,6 +46,8 @@ export default function SignUp() {
 
     async function handleSignUp(formValues: FormState) {
         if (!BtnSignUp) {
+            const WaitingToast = toast.loading("Waiting...")
+            setresError(null)
             setBtnSignUp(true)
             console.log(formValues);
 
@@ -50,10 +55,16 @@ export default function SignUp() {
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/register`, formValues)
                 console.log(data);
                 Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
-            } catch (err) {
+                toast.success("Registration completed successfully")
+
+            } catch (err: any) {
                 console.log(err);
                 setBtnSignUp(false)
-            } finally { }
+                setresError(err.response.data.error)
+                toast.error(err.response.data.error)
+            } finally {
+                toast.dismiss(WaitingToast)
+            }
 
         }
     }
@@ -214,6 +225,9 @@ export default function SignUp() {
                     className={`w-full  bg-green-600  ${BtnSignUp ? "cursor-wait" : "cursor-pointer"} hover:bg-green-700 text-white font-semibold py-2 rounded`}>
                     {BtnSignUp ? "Loading.." : "Sign up"}
                 </button>
+                {resError ? <div className="flex justify-center text-center">
+                    <h1 className=" text-error text-lg">{resError}</h1>
+                </div> : null}
                 <div className='mt-6 border-t-2 border-gray-300'>
                     <div className='flex justify-center items-center text-center flex-row p-8'>
                         <i className='text-xs text-center'>I have Account !  </i>
