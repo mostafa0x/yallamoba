@@ -1,18 +1,20 @@
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StateFaces } from '../../../../InterFaces/StateFaces';
 import MainLogo from '../MainLogo/page';
+import { logOut } from '@/lib/UserSlices';
+
+
 export default function NavBar() {
     const Path = usePathname();
     const { UserToken, UserData, UserLoading } = useSelector((state: StateFaces) => state.UserReducer)
-
-    useEffect(() => {
-    }, []);
+    const dispath = useDispatch()
+    const Router = useRouter()
 
     return (
-        UserLoading ? null : <div className="relative flex items-center justify-between pb-1 mt-2 px-6 bg-white shadow-md border-b-2 border-gray-200">
+        UserLoading ? null : <div className="relative flex items-center justify-between pb-1 mt-2 px-6 bg-white shadow-md border-b-2 border-gray-200 animate-fade-down animate-once">
             <div className="flex items-center gap-4 flex-1">
                 <Link href={"/"}><MainLogo size={"text-4xl"} /></Link>
                 <input
@@ -53,7 +55,7 @@ export default function NavBar() {
                         <div className="w-10 rounded-full">
                             <img
                                 alt="User Avatar"
-                                src={UserData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
+                                src={UserData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
                         </div>
                     </div>
                     <ul
@@ -67,7 +69,10 @@ export default function NavBar() {
                             </Link>
                         </li>
                         <li><i>Settings</i></li>
-                        <li><i>Logout</i></li>
+                        <li><i onClick={() => {
+                            dispath(logOut(null))
+                            Router.push("/signin")
+                        }}>Logout</i></li>
                     </ul>
                 </div>
             </div> : <div className='flex justify-end gap-3 animate-fade-down animate-once'>

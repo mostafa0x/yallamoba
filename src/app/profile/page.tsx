@@ -29,12 +29,12 @@ export default function Profile() {
                 <div className="w-35">
                     <img className='rounded-full'
                         alt="User Avatar"
-                        src={UserData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
+                        src={UserData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
                 </div>
                 <div className='flex flex-col'>
                     <div className='flex flex-row'>
-                        <h1 className='text-4xl'>{UserData.username ?? "Player Name"}</h1>
-                        <i className='pl-4 font-bold'>{UserData.gender === "Male" ? <i className="fa-solid fa-mars text-xl text-green-600"></i> : <i className="fa-solid fa-venus text-xl text-pink-600"></i>}</i>
+                        <h1 className='text-4xl'>{UserData?.username ?? "Player Name"}</h1>
+                        <i className='pl-4 font-bold'>{UserData?.gender === "Male" ? <i className="fa-solid fa-mars text-xl text-green-600"></i> : <i className="fa-solid fa-venus text-xl text-pink-600"></i>}</i>
 
                     </div>
                     {/* <h4 className='text-xl opacity-50'>Friends : {UserData.friends}</h4> */}

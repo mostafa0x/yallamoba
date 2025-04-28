@@ -43,6 +43,7 @@ export default function Login() {
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues)
                 console.log(data);
                 Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
+                toast.dismiss()
                 toast.success("Login successfully")
 
             } catch (err: any) {
@@ -122,7 +123,7 @@ export default function Login() {
                             </>
                                 : "Login"}
                         </button>
-                        {resError ? <div className="flex justify-center text-center">
+                        {resError ? <div className="flex justify-center text-center animate-shake animate-once">
                             <h1 className=" text-error text-lg">{resError}</h1>
                         </div> : null}
                     </form>

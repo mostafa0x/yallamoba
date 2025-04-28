@@ -1,10 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  StateUserSlices,
-  StateUserSlicesPayLoad,
-} from "../../InterFaces/StateUserSlices";
+import { StateUserSlices } from "../../InterFaces/StateUserSlices";
+import { toast } from "react-toastify";
 
-const initialState = {
+const initialState: StateUserSlices = {
   UserToken: null,
   UserData: {
     username: null,
@@ -37,10 +35,26 @@ const UserSlices = createSlice({
       localStorage.setItem("UserToken", action.payload.UserToken);
       localStorage.setItem("UserData", UserDataTxT);
     },
+    logOut: (state, action) => {
+      const WaitingLogOut = toast.loading("Wait to logout...");
+      state.UserToken = null;
+      state.UserData = null;
+      localStorage.removeItem("UserToken");
+      localStorage.removeItem("UserData");
+      // state.UserLoading = true;
+      toast.dismiss(WaitingLogOut);
+      toast.dismiss();
+      toast.success("You have successfully logged out");
+    },
   },
 });
 
 export const UserReducer = UserSlices.reducer;
 
-export const { ChangeUserToken, ChangeUserData, ChangeUserLoading, Logging } =
-  UserSlices.actions;
+export const {
+  ChangeUserToken,
+  ChangeUserData,
+  ChangeUserLoading,
+  Logging,
+  logOut,
+} = UserSlices.actions;

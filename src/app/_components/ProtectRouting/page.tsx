@@ -12,6 +12,32 @@ export default function ProtectRouting({ children }: any) {
     const { UserToken, UserData, UserLoading } = useSelector((state: StateFaces) => state.UserReducer)
     const dispatch = useDispatch()
 
+    // useEffect(() => {
+    //     const localToken = localStorage.getItem("UserToken");
+    //     const localData = localStorage.getItem("UserData");
+
+    //     if (localToken) {
+    //         dispatch(ChangeUserLoading(true));
+    //         dispatch(ChangeUserToken(localToken));
+
+    //         if (localData) {
+    //             try {
+    //                 const userDataJSON = JSON.parse(localData);
+    //                 dispatch(ChangeUserData(userDataJSON));
+    //             } catch (error) {
+    //                 console.error("Failed to parse user data:", error);
+    //             }
+    //         }
+
+    //         dispatch(ChangeUserLoading(false));
+    //     }
+    //     if (!localToken) {
+    //         dispatch(ChangeUserLoading(false));
+
+    //     }
+    // }, []);
+
+
     useEffect(() => {
         const localToken = localStorage.getItem("UserToken");
         const localData = localStorage.getItem("UserData");
@@ -35,12 +61,9 @@ export default function ProtectRouting({ children }: any) {
             dispatch(ChangeUserLoading(false));
 
         }
-    }, []);
 
-
-    useEffect(() => {
-        if (localStorage.getItem("UserToken")) {
-            if (!localStorage.getItem("UserData")) {
+        if (localToken) {
+            if (!localData) {
                 toast.error("An error occurred")
                 dispatch(ChangeUserToken(null))
                 dispatch(ChangeUserData(null))
@@ -50,18 +73,18 @@ export default function ProtectRouting({ children }: any) {
         }
 
         if (Path === "/profile") {
-            if (!localStorage.getItem("UserToken")) {
+            if (!localToken) {
                 Router.push("/signin")
             }
         }
         if (Path === "/signup" || Path === "/signin") {
-            if (localStorage.getItem("UserToken")) {
+            if (localToken) {
                 Router.push("/")
 
             }
         }
 
-    }, [Path, UserToken, UserData, UserLoading])
+    }, [Path, UserToken, UserLoading])
 
     if (UserLoading) {
         return <SpinnerLoader />

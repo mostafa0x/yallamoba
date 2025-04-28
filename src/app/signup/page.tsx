@@ -113,7 +113,6 @@ export default function SignUp() {
             <form onSubmit={Formik.handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
                 <h2 className="text-blue-600 text-2xl font-bold mb-6 text-center">Create a new account</h2>
 
-                {/* الاسم */}
                 <div className="flex gap-2 ">
                     <input
                         type="text"
@@ -134,7 +133,6 @@ export default function SignUp() {
                 </div>
 
 
-                {/* الإيميل والباسورد */}
                 <input
                     type="email"
                     name="email"
@@ -186,7 +184,6 @@ export default function SignUp() {
                         : <h1 className='invisible '>hidden text</h1>}
                 </div>
 
-                {/* الجندر */}
                 <label className="block text-sm mb-1">Gender</label>
                 <div className="flex justify-between  px-26">
                     <label className="flex items-center gap-2">
@@ -208,7 +205,6 @@ export default function SignUp() {
                         : <h1 className='invisible '>hidden text</h1>}
                 </div>
 
-                {/* الرول */}
                 <RoleSelector Formik={Formik} />
 
                 <div className=' py-2'>
@@ -216,16 +212,14 @@ export default function SignUp() {
                         <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.role}</h1>
                         : <h1 className='invisible '>hidden text</h1>}
                 </div>
-                {/* اختيار صورة البروفايل */}
                 <AvatarIcons Formik={Formik} />
 
-                {/* الزر */}
                 <button
                     type="submit"
                     className={`w-full  bg-green-600  ${BtnSignUp ? "cursor-wait" : "cursor-pointer"} hover:bg-green-700 text-white font-semibold py-2 rounded`}>
                     {BtnSignUp ? "Loading.." : "Sign up"}
                 </button>
-                {resError ? <div className="flex justify-center text-center">
+                {resError ? <div className="flex justify-center text-center animate-shake animate-once">
                     <h1 className=" text-error text-lg">{resError}</h1>
                 </div> : null}
                 <div className='mt-6 border-t-2 border-gray-300'>
