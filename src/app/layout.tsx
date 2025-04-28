@@ -6,6 +6,9 @@ import { Provider } from "react-redux";
 import { Store } from "@/lib/store";
 import NavBar from "./_components/NavBar/page";
 import ProtectRouting from "./_components/ProtectRouting/page";
+import { ToastContainer, Bounce } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function RootLayout({
   children,
@@ -20,6 +23,19 @@ export default function RootLayout({
           <ProtectRouting>
             {children}
           </ProtectRouting>
+          <ToastContainer position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            limit={5}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            transition={Bounce}
+          />
         </body>
       </Provider>
     </html>

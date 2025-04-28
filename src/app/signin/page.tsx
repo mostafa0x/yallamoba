@@ -11,6 +11,7 @@ import SpinnerLoader from '../_components/SpinnerLoader/page';
 import axios from "axios";
 import { ChangeUserToken, Logging } from "@/lib/UserSlices";
 import dotenv from "dotenv"
+import { toast } from "react-toastify";
 dotenv.config()
 
 export default function Login() {
@@ -39,11 +40,13 @@ export default function Login() {
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues)
                 console.log(data);
                 Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
+                toast.success("Login successfully")
 
-
-            } catch (err) {
+            } catch (err: any) {
                 console.log(err);
                 setBtnLogin(false)
+                toast.error(err.response.data.error)
+
             } finally {
                 // Router.replace("/")
                 // setBtnLogin(false)

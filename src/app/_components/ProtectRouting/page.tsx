@@ -4,6 +4,7 @@ import { StateFaces } from '../../../../InterFaces/StateFaces'
 import { usePathname, useRouter } from 'next/navigation'
 import { ChangeUserToken, ChangeUserData, ChangeUserLoading } from '@/lib/UserSlices'
 import SpinnerLoader from '../SpinnerLoader/page'
+import { toast } from 'react-toastify'
 
 export default function ProtectRouting({ children }: any) {
     const Router = useRouter()
@@ -30,12 +31,17 @@ export default function ProtectRouting({ children }: any) {
 
             dispatch(ChangeUserLoading(false));
         }
+        if (!localToken) {
+            dispatch(ChangeUserLoading(false));
+
+        }
     }, []);
 
 
     useEffect(() => {
         if (localStorage.getItem("UserToken")) {
             if (!localStorage.getItem("UserData")) {
+                toast.error("An error occurred")
                 dispatch(ChangeUserToken(null))
                 dispatch(ChangeUserData(null))
                 localStorage.removeItem("UserToken")
@@ -51,7 +57,6 @@ export default function ProtectRouting({ children }: any) {
         if (Path === "/signup" || Path === "/signin") {
             if (localStorage.getItem("UserToken")) {
                 Router.push("/")
-                console.log("XXX");
 
             }
         }
