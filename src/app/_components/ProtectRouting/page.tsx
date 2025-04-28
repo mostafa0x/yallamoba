@@ -21,7 +21,7 @@ export default function ProtectRouting({ children }: any) {
             }
         }
 
-    }, [Path])
+    }, [Path, UserToken, UserData])
 
 
     return <div>

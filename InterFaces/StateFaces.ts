@@ -1,4 +1,4 @@
-import { UserSlices } from "./UserSlices";
+import { UserSlices } from "./StateUserSlices";
 
 export interface StateFaces {
   CounterReducer: {

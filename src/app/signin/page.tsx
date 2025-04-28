@@ -5,20 +5,24 @@ import { useFormik } from "formik"
 import * as yup from "yup"
 import { FormState } from "../../../InterFaces/FormState";
 import { useRouter } from "next/navigation";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StateFaces } from '../../../InterFaces/StateFaces';
 import SpinnerLoader from '../_components/SpinnerLoader/page';
-
+import axios from "axios";
+import { ChangeUserToken, Logging } from "@/lib/UserSlices";
+import dotenv from "dotenv"
+dotenv.config()
 
 export default function Login() {
     const Router = useRouter()
     const [PageAnmie, setPageAnmie] = useState(false)
     const [BtnLogin, setBtnLogin] = useState(false)
     const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
+    const Dispath = useDispatch()
 
 
     const validationSchema = yup.object().shape({
-        email: yup.string().email("Invild email").required("Required !"),
+        identifier: yup.string().required("Required !"),
         password: yup.string().min(8, "To Short").required("Required !")
     })
 
@@ -31,13 +35,26 @@ export default function Login() {
     const handleLogin = async (formValues: FormState) => {
         if (!BtnLogin) {
             setBtnLogin(true)
-            console.log(formValues);
+            try {
+                const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues)
+                console.log(data);
+                Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
+
+
+            } catch (err) {
+                console.log(err);
+
+            } finally {
+                // Router.replace("/")
+                // setBtnLogin(false)
+
+            }
         }
     }
 
     const Formik = useFormik({
         initialValues: {
-            email: "",
+            identifier: "",
             password: ""
         }, validationSchema, onSubmit: handleLogin
     })
@@ -64,17 +81,17 @@ export default function Login() {
 
                     <form onSubmit={Formik.handleSubmit} className="flex flex-col space-y-4">
                         <input
-                            type="email"
+                            type="text"
                             placeholder="email"
-                            name="email"
-                            value={Formik.values.email}
+                            name="identifier"
+                            value={Formik.values.identifier}
                             onChange={Formik.handleChange}
                             onBlur={Formik.handleBlur}
                             className="border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             autoComplete="email"
                         />
-                        {Formik.errors.email && Formik.touched.email ? <label className="text-red-600 opacity-70 animate-shake animate-once">{Formik.errors.email}</label> : null}
+                        {Formik.errors.identifier && Formik.touched.identifier ? <label className="text-red-600 opacity-70 animate-shake animate-once">{Formik.errors.identifier}</label> : null}
                         <input
                             type="password"
                             placeholder="password"
@@ -93,7 +110,11 @@ export default function Login() {
                             type="submit"
                             className={`bg-blue-600 text-white rounded-md py-2 font-bold ${BtnLogin ? "cursor-wait" : "cursor-pointer"} hover:bg-blue-700`}
                         >
-                            {BtnLogin ? "Loading..." : "Login"}
+                            {BtnLogin ? <>
+                                <i className="fa-duotone fa-solid fa-spinner fa-bounce"></i>
+                                Loading...
+                            </>
+                                : "Login"}
                         </button>
                     </form>
 

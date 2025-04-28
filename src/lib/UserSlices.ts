@@ -1,4 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {
+  StateUserSlices,
+  StateUserSlicesPayLoad,
+} from "../../InterFaces/StateUserSlices";
 
 const initialState = {
   UserToken: null,
@@ -19,9 +23,16 @@ const UserSlices = createSlice({
     ChangeUserToken: (state, action) => {
       state.UserToken = action.payload;
     },
+    Logging: (state, action) => {
+      state.UserToken = action.payload.UserToken;
+      state.UserData = action.payload.UserData;
+      const UserDataTxT = JSON.stringify(action.payload.UserData);
+      localStorage.setItem("UserToken", action.payload.UserToken);
+      localStorage.setItem("UserData", UserDataTxT);
+    },
   },
 });
 
 export const UserReducer = UserSlices.reducer;
 
-export const { ChangeUserToken } = UserSlices.actions;
+export const { ChangeUserToken, Logging } = UserSlices.actions;

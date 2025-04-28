@@ -11,6 +11,10 @@ import SpinnerLoader from '../_components/SpinnerLoader/page';
 import RoleSelector from '../_components/RoleSelector/page';
 import { setCurrentAvatarIndex, setAvatarAnmition } from '@/lib/AvatarSlices';
 import AvatarIcons from '../_components/AvatarIcons/page';
+import axios from 'axios';
+import dotenv from "dotenv"
+import { Logging } from '@/lib/UserSlices';
+dotenv.config()
 
 export default function SignUp() {
     const [PageAnime, setPageAnime] = useState(false)
@@ -25,7 +29,7 @@ export default function SignUp() {
     }
 
     const validationSchema = yup.object().shape({
-        name: yup.string().min(6, "must be 6").max(12, "max 12").required("Required !"),
+        username: yup.string().min(6, "must be 6").max(12, "max 12").required("Required !"),
         gender: yup.string().required("Required !"),
         email: yup.string().email("Invild email").required("Required !"),
         password: yup.string().min(8, "To Short").required("Required !"),
@@ -39,15 +43,25 @@ export default function SignUp() {
 
     async function handleSignUp(formValues: FormState) {
         if (!BtnSignUp) {
-            await setBtnSignUp(true)
-            return console.log(formValues);
+            setBtnSignUp(true)
+            console.log(formValues);
+
+            try {
+                const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/register`, formValues)
+                console.log(data);
+                Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
+
+            } catch (err) {
+                console.log(err);
+
+            } finally { }
 
         }
     }
 
     const Formik = useFormik({
         initialValues: {
-            name: "",
+            username: "",
             gender: "",
             email: "",
             password: "",
@@ -93,19 +107,19 @@ export default function SignUp() {
                 <div className="flex gap-2 ">
                     <input
                         type="text"
-                        name="name"
+                        name="username"
                         placeholder="Username in game"
                         onChange={Formik.handleChange}
                         onBlur={Formik.handleBlur}
-                        value={Formik.values.name}
+                        value={Formik.values.username}
                         className="w-full px-3 py-2 border rounded"
                         required
                         autoComplete='username'
                     />
                 </div>
                 <div className=' py-2'>
-                    {Formik.errors.name && Formik.touched.name ?
-                        <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.name}</h1>
+                    {Formik.errors.username && Formik.touched.username ?
+                        <h1 className='text-red-500 opacity-70 animate-shake animate-once'>{Formik.errors.username}</h1>
                         : <h1 className='invisible '>hidden text</h1>}
                 </div>
 
