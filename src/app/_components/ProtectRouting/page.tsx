@@ -2,52 +2,65 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFaces } from '../../../../InterFaces/StateFaces'
 import { usePathname, useRouter } from 'next/navigation'
-import { ChangeUserToken, ChangeUserData } from '@/lib/UserSlices'
+import { ChangeUserToken, ChangeUserData, ChangeUserLoading } from '@/lib/UserSlices'
+import SpinnerLoader from '../SpinnerLoader/page'
 
 export default function ProtectRouting({ children }: any) {
     const Router = useRouter()
     const Path = usePathname()
-    const { UserToken, UserData } = useSelector((state: StateFaces) => state.UserReducer)
-    const Dispath = useDispatch()
+    const { UserToken, UserData, UserLoading } = useSelector((state: StateFaces) => state.UserReducer)
+    const dispatch = useDispatch()
 
     useEffect(() => {
+        const localToken = localStorage.getItem("UserToken");
+        const localData = localStorage.getItem("UserData");
 
-        if (localStorage.getItem("UserToken")) {
+        if (localToken) {
+            dispatch(ChangeUserLoading(true));
+            dispatch(ChangeUserToken(localToken));
 
-            Dispath(ChangeUserToken(localStorage.getItem("UserToken")))
-
-            if (localStorage.getItem("UserData")) {
-                const UserDataJSON = JSON.parse(localStorage.getItem("UserData") ?? "")
-                Dispath(ChangeUserData(UserDataJSON))
+            if (localData) {
+                try {
+                    const userDataJSON = JSON.parse(localData);
+                    dispatch(ChangeUserData(userDataJSON));
+                } catch (error) {
+                    console.error("Failed to parse user data:", error);
+                }
             }
-        }
 
-    }, [])
+            dispatch(ChangeUserLoading(false));
+        }
+    }, []);
+
 
     useEffect(() => {
         if (localStorage.getItem("UserToken")) {
             if (!localStorage.getItem("UserData")) {
-                Dispath(ChangeUserToken(null))
-                Dispath(ChangeUserData(null))
+                dispatch(ChangeUserToken(null))
+                dispatch(ChangeUserData(null))
                 localStorage.removeItem("UserToken")
                 Router.push("/signin")
             }
         }
 
         if (Path === "/profile") {
-            if (!UserToken) {
+            if (!localStorage.getItem("UserToken")) {
                 Router.push("/signin")
             }
         }
         if (Path === "/signup" || Path === "/signin") {
-            if (UserToken) {
+            if (localStorage.getItem("UserToken")) {
                 Router.push("/")
+                console.log("XXX");
+
             }
         }
 
-    }, [Path, UserToken, UserData])
+    }, [Path, UserToken, UserData, UserLoading])
 
-
+    if (UserLoading) {
+        return <SpinnerLoader />
+    }
 
     return <div>
         {children}

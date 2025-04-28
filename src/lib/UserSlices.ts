@@ -7,13 +7,14 @@ import {
 const initialState = {
   UserToken: null,
   UserData: {
-    Username: null,
-    Avatar: null,
-    Role: null,
-    Gender: null,
-    Email: null,
-    Friends: 0,
+    username: null,
+    avatar: null,
+    role: null,
+    gender: null,
+    email: null,
+    friends: 0,
   },
+  UserLoading: true,
 };
 
 const UserSlices = createSlice({
@@ -25,6 +26,9 @@ const UserSlices = createSlice({
     },
     ChangeUserData: (state, action) => {
       state.UserData = action.payload;
+    },
+    ChangeUserLoading: (state, action) => {
+      state.UserLoading = action.payload;
     },
     Logging: (state, action) => {
       state.UserToken = action.payload.UserToken;
@@ -38,4 +42,5 @@ const UserSlices = createSlice({
 
 export const UserReducer = UserSlices.reducer;
 
-export const { ChangeUserToken, ChangeUserData, Logging } = UserSlices.actions;
+export const { ChangeUserToken, ChangeUserData, ChangeUserLoading, Logging } =
+  UserSlices.actions;

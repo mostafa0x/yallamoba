@@ -29,15 +29,16 @@ export default function Profile() {
                 <div className="w-35">
                     <img className='rounded-full'
                         alt="User Avatar"
-                        src={UserData.Avatar ?? "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"} />
+                        src={UserData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
                 </div>
                 <div className='flex flex-col'>
                     <div className='flex flex-row'>
-                        <h1 className='text-4xl'>{UserData.Username ?? "Player Name"}</h1>
-                        <i className='pl-4 font-bold'>{UserData.Gender === "Mele" ? "M" : "F"}</i>
+                        <h1 className='text-4xl'>{UserData.username ?? "Player Name"}</h1>
+                        <i className='pl-4 font-bold'>{UserData.gender === "Male" ? <i className="fa-solid fa-mars text-green-600"></i> : <i className="fa-solid fa-venus text-pink-600"></i>}</i>
 
                     </div>
-                    <h4 className='text-xl opacity-50'>Friends : {UserData.Friends}</h4></div>
+                    {/* <h4 className='text-xl opacity-50'>Friends : {UserData.friends}</h4> */}
+                </div>
             </div>
             <div className='mr-32'>
                 <button onClick={() => setEditProfileBool(true)} className='btn btn-primary'> Edit Profile</button>
@@ -46,7 +47,7 @@ export default function Profile() {
         </div>
         <AddPost UserData={UserData} />
         <div className='mt-12'>
-            <PostCard />
+            <PostCard UserData={UserData} />
 
         </div>
 

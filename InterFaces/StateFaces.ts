@@ -1,4 +1,4 @@
-import { UserSlices } from "./StateUserSlices";
+import { StateUserSlices } from "./StateUserSlices";
 
 export interface StateFaces {
   CounterReducer: {
@@ -7,7 +7,7 @@ export interface StateFaces {
   PostsReducer: {
     AllPosts: [];
   };
-  UserReducer: UserSlices;
+  UserReducer: StateUserSlices;
   AvatarReducer: {
     avatars: string[];
     currentAvatarIndex: number;

@@ -1,14 +1,14 @@
 import React from 'react'
 
-export default function PostCard() {
+export default function PostCard(props: any) {
     return (
         <div className="bg-white rounded-lg shadow-md p-4 mb-6 border border-gray-200 max-w-2xl mx-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
                     <img
-                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                        alt="User"
+                        src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
+                        alt="Post Avatar"
                         className="w-10 h-10 rounded-full"
                     />
                     <div>
@@ -72,8 +72,8 @@ export default function PostCard() {
             {/* Add Comment */}
             <div className="flex items-center gap-3 mt-3">
                 <img
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                    alt="User"
+                    src={props.UserData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
+                    alt="User Avatar"
                     className="w-9 h-9 rounded-full"
                 />
                 <input

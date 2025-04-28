@@ -1,25 +1,26 @@
 export interface StateUserSlices {
   UserToken: String | null;
   UserData: {
-    Username: null | string;
-    Avatar: null | string;
-    Role: null | string;
-    Gender: null | string;
-    Email: null | string;
-    Friends: number;
+    username: null | string;
+    avatar: null | string;
+    role: null | string;
+    gender: null | string;
+    email: null | string;
+    friends: number;
   };
+  UserLoading: boolean;
 }
 
 export interface StateUserSlicesPayLoad {
   payload: {
     UserToken: String | null;
     UserData: {
-      Username: null | string;
-      Avatar: null | string;
-      Role: null | string;
-      Gender: null | string;
-      Email: null | string;
-      Friends: number;
+      username: null | string;
+      avatar: null | string;
+      role: null | string;
+      gender: null | string;
+      email: null | string;
+      friends: number;
     };
   };
 }

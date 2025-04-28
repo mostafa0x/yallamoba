@@ -8,8 +8,8 @@ export default function page(props: any) {
                     <img
                         className="rounded-full w-full h-full object-cover"
                         alt="User Avatar"
-                        src={props.UserData.Avatar ?? "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
-                    />
+                        src={props.UserData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
+
                 </div>
                 <input
                     className="flex-1 bg-gray-100 hover:bg-gray-300 text-sm px-4 py-2 rounded-full outline-none cursor-pointer"

@@ -6,13 +6,13 @@ import { StateFaces } from '../../../../InterFaces/StateFaces';
 import MainLogo from '../MainLogo/page';
 export default function NavBar() {
     const Path = usePathname();
-    const { UserToken, UserData } = useSelector((state: StateFaces) => state.UserReducer)
+    const { UserToken, UserData, UserLoading } = useSelector((state: StateFaces) => state.UserReducer)
 
     useEffect(() => {
     }, []);
 
     return (
-        <div className="relative flex items-center justify-between pb-1 mt-2 px-6 bg-white shadow-md border-b-2 border-gray-200">
+        UserLoading ? null : <div className="relative flex items-center justify-between pb-1 mt-2 px-6 bg-white shadow-md border-b-2 border-gray-200">
             <div className="flex items-center gap-4 flex-1">
                 <Link href={"/"}><MainLogo size={"text-4xl"} /></Link>
                 <input
@@ -31,11 +31,11 @@ export default function NavBar() {
                     </Link>
                 </div>
                 {/* <div className={`flex justify-center ${Path === "/friends" ? "border-b-4 border-blue-600" : "border-b-4 border-transparent"} pt-2 pb-1 w-22`}>
-                    <i className="fa-solid fa-users hover:text-blue-600 cursor-pointer" />
-                </div>
-                <div className={`flex justify-center ${Path === "/store" ? "border-b-4 border-blue-600" : "border-b-4 border-transparent"} pt-2 pb-1 w-22`}>
-                    <i className="fa-solid fa-store hover:text-blue-600 cursor-pointer" />
-                </div> */}
+               <i className="fa-solid fa-users hover:text-blue-600 cursor-pointer" />
+           </div>
+           <div className={`flex justify-center ${Path === "/store" ? "border-b-4 border-blue-600" : "border-b-4 border-transparent"} pt-2 pb-1 w-22`}>
+               <i className="fa-solid fa-store hover:text-blue-600 cursor-pointer" />
+           </div> */}
             </div>
 
             {/*دا الجزء الاخير بيخص صوره البروفيل والاشعارت و شكله بعد التسجيل وقبل */}
@@ -52,8 +52,8 @@ export default function NavBar() {
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                         <div className="w-10 rounded-full">
                             <img
-                                alt="Tailwind CSS Navbar component"
-                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                alt="User Avatar"
+                                src={UserData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
                         </div>
                     </div>
                     <ul
@@ -78,3 +78,5 @@ export default function NavBar() {
         </div>
     );
 }
+
+
