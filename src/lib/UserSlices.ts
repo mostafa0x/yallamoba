@@ -23,6 +23,9 @@ const UserSlices = createSlice({
     ChangeUserToken: (state, action) => {
       state.UserToken = action.payload;
     },
+    ChangeUserData: (state, action) => {
+      state.UserData = action.payload;
+    },
     Logging: (state, action) => {
       state.UserToken = action.payload.UserToken;
       state.UserData = action.payload.UserData;
@@ -35,4 +38,4 @@ const UserSlices = createSlice({
 
 export const UserReducer = UserSlices.reducer;
 
-export const { ChangeUserToken, Logging } = UserSlices.actions;
+export const { ChangeUserToken, ChangeUserData, Logging } = UserSlices.actions;

@@ -50,10 +50,9 @@ export default function SignUp() {
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/register`, formValues)
                 console.log(data);
                 Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
-
             } catch (err) {
                 console.log(err);
-
+                setBtnSignUp(false)
             } finally { }
 
         }
