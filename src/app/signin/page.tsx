@@ -41,17 +41,14 @@ export default function Login() {
             setBtnLogin(true)
             try {
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues)
-                console.log(data);
                 Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
-                toast.dismiss()
                 toast.success("Login successfully")
 
             } catch (err: any) {
-                console.log(err);
                 setBtnLogin(false)
                 setresError(err.response.data.error)
                 toast.error(err.response.data.error)
-
+                throw new Error(err.response.data.error)
             } finally {
                 toast.dismiss(WaitingToast)
 
@@ -115,7 +112,7 @@ export default function Login() {
 
                         <button
                             type="submit"
-                            className={`bg-blue-600 text-white rounded-md py-2 font-bold ${BtnLogin ? "cursor-wait" : "cursor-pointer"} hover:bg-blue-700`}
+                            className={`bg-blue-600 text-white rounded-md mb-4 py-2 font-bold ${BtnLogin ? "cursor-wait" : "cursor-pointer"} hover:bg-blue-700`}
                         >
                             {BtnLogin ? <>
                                 <i className="fa-duotone fa-solid fa-spinner fa-bounce"></i>
@@ -128,11 +125,11 @@ export default function Login() {
                         </div> : null}
                     </form>
 
-                    <div className="text-center mt-4">
+                    {/* <div className="text-center mt-4">
                         <a href="#" className="text-blue-600 text-sm hover:underline">
                             forget password?
                         </a>
-                    </div>
+                    </div> */}
 
                     <hr className="my-4" />
 

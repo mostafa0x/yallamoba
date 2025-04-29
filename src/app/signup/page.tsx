@@ -49,19 +49,17 @@ export default function SignUp() {
             const WaitingToast = toast.loading("Waiting...")
             setresError(null)
             setBtnSignUp(true)
-            console.log(formValues);
-
             try {
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/register`, formValues)
-                console.log(data);
                 Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
                 toast.success("Registration completed successfully")
 
             } catch (err: any) {
-                console.log(err);
                 setBtnSignUp(false)
                 setresError(err.response.data.error)
                 toast.error(err.response.data.error)
+                throw new Error(err.response.data.error)
+
             } finally {
                 toast.dismiss(WaitingToast)
             }

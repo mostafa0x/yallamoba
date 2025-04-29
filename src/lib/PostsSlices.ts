@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { StatePostsSlices } from "../../InterFaces/StatePostsSlices";
 
-export let GetAllPosts = createAsyncThunk(
+export const GetAllPosts = createAsyncThunk(
   "PostsSlices/GetAllPosts",
   async () => {
     const data = await axios.get("https://jsonplaceholder.typicode.com/posts");
@@ -11,12 +12,14 @@ export let GetAllPosts = createAsyncThunk(
   }
 );
 
+const initialState: StatePostsSlices = { allPosts: [], userPosts: [] };
+
 const PostsSlices = createSlice({
   name: "PostsSlices",
-  initialState: { AllPosts: [] },
+  initialState,
   extraReducers: (builder) => {
     builder.addCase(GetAllPosts.fulfilled, (state, action) => {
-      state.AllPosts = action.payload;
+      state.allPosts = action.payload;
     });
   },
   reducers: {},
