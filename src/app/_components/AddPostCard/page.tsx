@@ -1,11 +1,40 @@
+import { AddPostTouserPost } from '@/lib/PostsSlices';
 import { Formik, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { StatePostData } from '../../../../InterFaces/StatePostsSlices';
+import { StateFaces } from '../../../../InterFaces/StateFaces';
+type formValues = {
+    body: string,
+    files: File | string
+}
 
 export default function AddPostCard(props: any) {
     const [files, setFiles] = useState<File[]>([]);
-    function handleAddPost(formValues: any) {
+    const { UserData } = useSelector((state: StateFaces) => state.UserReducer)
+    const dispath = useDispatch()
+    function handleAddPost(formValues: formValues) {
         console.log(formValues);
+        const fromdata = new FormData()
+        fromdata.append("body", formValues.body)
+        fromdata.append("files", formValues.files)
 
+        const FinalData: StatePostData = {
+            OwenData: {
+                userName: UserData?.username ?? "",
+                avatar: UserData?.avatar ?? "",
+                UID: ""
+            }, PostData: {
+                body: formValues.body,
+                files: formValues.files,
+                likes: 0,
+                commentsCount: 0,
+                commentsBody: ""
+            }
+        }
+        console.log(FinalData);
+
+        dispath(AddPostTouserPost(FinalData))
     }
     const Formik = useFormik({
         initialValues: {

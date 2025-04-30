@@ -10,7 +10,9 @@ const initialState: StateUserSlices = {
     role: null,
     gender: null,
     email: null,
-    friends: 0,
+    popularity: 0,
+    mobaCoin: 0,
+    UID: null,
   },
   UserLoading: true,
 };
