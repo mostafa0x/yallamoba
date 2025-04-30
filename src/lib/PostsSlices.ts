@@ -22,7 +22,12 @@ const PostsSlices = createSlice({
       state.allPosts = action.payload;
     });
   },
-  reducers: {},
+  reducers: {
+    AddPostTouserPost: (state, action) => {
+      state.userPosts.push(action.payload);
+    },
+  },
 });
 
 export const PostsReducer = PostsSlices.reducer;
+export const { AddPostTouserPost } = PostsSlices.actions;

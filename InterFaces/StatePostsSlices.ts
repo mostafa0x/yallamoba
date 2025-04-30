@@ -8,3 +8,14 @@ export interface StatePost {
   body: string;
   files: string;
 }
+
+export interface StatePostData {
+  OwenData: {
+    userName: string;
+    avatar: string;
+  };
+  PostData: {
+    body: string;
+    Files: File;
+  };
+}

@@ -52,7 +52,6 @@ export default function PostCard(props: any) {
                 </div>
                 <div className="flex gap-4">
                     <span>45 Comments</span>
-                    <span>10 Shares</span>
                 </div>
             </div>
 
