@@ -5,7 +5,7 @@ const SpinnerLoader = () => {
 
 
     return (
-        <div className="flex justify-center items-center mt-42 flex-col text-center  animate-bounce animate-infinite">
+        <div className="flex justify-center items-center mt-62 flex-col text-center  animate-bounce animate-infinite">
             <MainLogo size={"text-8xl"} />
             {/* <h1 className="text-2xl font-bold opacity-60">Loading....</h1> */}
             <PulseLoader className="opacity-60 mt-2"

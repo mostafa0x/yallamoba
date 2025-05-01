@@ -1,26 +1,42 @@
 import React from 'react'
-import { StateUserData } from '../../../../InterFaces/StateUserSlices'
-import { StatePostData } from '../../../../InterFaces/StatePostsSlices';
+import { StateUserData, TypeRole } from '../../../../InterFaces/StateUserSlices'
+import { postData, StatePostData } from '../../../../InterFaces/StatePostsSlices';
+import { ProfileData } from '@/app/profile/[UID]/page';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
+
+interface Userdata {
+    username: null | string;
+    avatar: null | string;
+    role: null | TypeRole;
+    gender: null | string;
+    popularity: number;
+    UID: null | number;
+}
 interface Props {
-    UserData: StateUserData | null | undefined;
-    Post: StatePostData
+    UserData: Userdata | null | undefined;
+    Post: postData
+    myData: Userdata | undefined | null
 }
 
-export default function PostCard({ UserData, Post }: Props) {
+export default function PostCard({ UserData, Post, myData }: Props) {
+    const TimePost = dayjs(Post.updated_at).fromNow();
+
     return (
         <div className="bg-white rounded-lg shadow-md p-4 mb-6 border border-gray-200 max-w-2xl mx-auto">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
                     <img
-                        src={Post.OwenData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
+                        src={UserData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
                         alt="Post Avatar"
                         className="w-10 h-10 rounded-full"
                     />
                     <div>
-                        <p className="font-semibold">{Post.OwenData.userName}</p>
-                        <p className="text-sm text-gray-500">2 hours ago</p>
+                        <p className="font-semibold">{UserData?.username}</p>
+                        <p className="text-sm text-gray-500">{TimePost}</p>
                     </div>
                 </div>
                 <div className="dropdown">
@@ -35,13 +51,13 @@ export default function PostCard({ UserData, Post }: Props) {
 
             {/* Body text */}
             <p className="mb-3 text-gray-800">
-                {Post.PostData.body}
+                {Post?.body}
             </p>
 
             {/* Media (Image or Video) */}
             <div className="rounded-lg overflow-hidden mb-3">
-                {Post.PostData.files ? <img
-                    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+                {Post.files ? <img
+                    src={Post.files[0] ?? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"}
                     alt="Post"
                     className="w-full h-auto max-h-[400px] object-cover"
                 /> : null}
@@ -56,10 +72,10 @@ export default function PostCard({ UserData, Post }: Props) {
             <div className="flex justify-between items-center text-sm text-gray-500  py-2">
                 <div className="flex items-center gap-2">
                     <i className="fa-solid fa-thumbs-up text-blue-600" />
-                    <span>{Post.PostData.likes}</span>
+                    {/* <span>{Post.PostData.likes}</span> */}
                 </div>
                 <div className="flex gap-4">
-                    <span>{Post.PostData.commentsCount} Comments</span>
+                    {/* <span>{Post.PostData.commentsCount} Comments</span> */}
                 </div>
             </div>
 
@@ -79,7 +95,7 @@ export default function PostCard({ UserData, Post }: Props) {
             {/* Add Comment */}
             <div className="flex items-center gap-3 mt-3">
                 <img
-                    src={UserData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
+                    src={myData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
                     alt="User Avatar"
                     className="w-9 h-9 rounded-full"
                 />

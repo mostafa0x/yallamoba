@@ -1,6 +1,6 @@
 export interface StatePostsSlices {
   allPosts: StatePost[];
-  userPosts: StatePost[];
+  userPosts: any[];
 }
 
 export interface StatePost {
@@ -24,10 +24,10 @@ export interface StatePostData {
   };
 }
 
-export interface StatePostData {
+export interface postData {
+  user_id: number;
   body: string;
-  files: File | string;
-  likes: number;
-  commentsCount: number;
-  commentsBody: string;
+  files: string[];
+  created_at: string;
+  updated_at: string;
 }

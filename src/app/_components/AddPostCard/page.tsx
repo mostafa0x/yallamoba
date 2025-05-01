@@ -14,6 +14,7 @@ export default function AddPostCard(props: any) {
     const { UserData } = useSelector((state: StateFaces) => state.UserReducer)
     const dispath = useDispatch()
     function handleAddPost(formValues: formValues) {
+        props.SetFromChild()
         console.log(formValues);
         const fromdata = new FormData()
         fromdata.append("body", formValues.body)

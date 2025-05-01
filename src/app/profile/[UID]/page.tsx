@@ -11,8 +11,11 @@ import { StateRole } from '../../../../InterFaces/StateRoleTypes'
 import { StatePostData } from '../../../../InterFaces/StatePostsSlices'
 import { useParams } from 'next/navigation'
 import { TypeRole } from '../../../../InterFaces/StateUserSlices'
+import axios from 'axios'
+import dotenv from "dotenv"
+dotenv.config()
 
-interface ProfileData {
+export interface ProfileData {
     ownerData: {
         username: null | string;
         avatar: null | string;
@@ -20,9 +23,16 @@ interface ProfileData {
         gender: null | string;
         popularity: number;
         UID: null | number;
-    }, ownerPosts: StatePostData[]
+    }, ownerPosts: PostDataPP[]
 }
 
+interface PostDataPP {
+    body: string,
+    created_at: string
+    files: string[]
+    id: string;
+    updated_at: string
+}
 
 export default function Profile() {
     const { UID } = useParams()
@@ -39,6 +49,9 @@ export default function Profile() {
         Jungle: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq08kFjpruyAJrrmJG0uJv8wHY5EJk53CTJAyI3htJLiuOkyzi65FowBduAVLUzhj4byA&usqp=CAU",
         Mid: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJV5jAqEnMlYpNsYlLgvRD4Lzi6Q4Glvquh2OYYeMVReFlcO6M8DraebBGUweWYlgV1qU&usqp=CAU"
     }
+    const headers: any = {
+        authorization: `Bearer ${UserToken}`
+    }
     const popularity: string = "https://sin1.contabostorage.com/0a986eb902c4469cb860e43985eb18a1:vocapanel/sabishopgaming/10-5b75-original.png"
 
 
@@ -49,13 +62,30 @@ export default function Profile() {
         setShowModal(true)
     }
 
+    async function GetProfile() {
+        try {
+            const data = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/${UID}`, { headers })
+            console.log(data);
+            setprofileData({ ownerData: { username: data.data.ownerData?.username, avatar: data.data.ownerData?.avatar, role: data.data.ownerData?.role, gender: data.data.ownerData?.gender, popularity: data.data.ownerData?.popularity, UID: data.data.ownerData?.UID }, ownerPosts: data.data?.ownerPosts })
+            setmyProfile(false)
+            setpageLoading(false)
+
+        } catch (err) {
+            console.log(err);
+
+        }
+    }
+
 
     const [showModal, setShowModal] = useState(false);
     useEffect(() => {
         if (UID === UserData?.UID) {
-            UserData && setprofileData({ ownerData: { username: UserData?.username, avatar: UserData?.avatar, role: UserData?.role, gender: UserData?.gender, popularity: UserData?.popularity, UID: UserData?.UID }, ownerPosts: [] })
+            UserData && setprofileData({ ownerData: { username: UserData?.username, avatar: UserData?.avatar, role: UserData?.role, gender: UserData?.gender, popularity: UserData?.popularity, UID: UserData?.UID }, ownerPosts: userPosts })
             setmyProfile(true)
             setpageLoading(false)
+        } else {
+            GetProfile()
+
         }
 
 
@@ -93,7 +123,7 @@ export default function Profile() {
 
     return (
         <>
-            {showModal ? <AddPostCard SetFromChild={SetFromChild} /> : null}
+            {showModal && myProfile ? <AddPostCard SetFromChild={SetFromChild} /> : null}
             <div className='my-12 mx-40 animate-fade-up animate-once '>
                 <div className='flex justify-between border-b-2 pb-2 border-gray-400 items-center mb-12 '>
                     <div className='flex flex-row gap-8 items-center'>
@@ -118,14 +148,14 @@ export default function Profile() {
                         </div>
                     </div>
                     <div className='mr-32'>
-                        <button onClick={() => setEditProfileBool(true)} className='btn btn-primary'> Edit Profile</button>
+                        {myProfile ? <button onClick={() => setEditProfileBool(true)} className='btn btn-primary'> Edit Profile</button> : null}
                     </div>
 
                 </div>
-                <AddPost OpenCard={OpenCard} UserData={profileData?.ownerData} />
+                {myProfile ? <AddPost OpenCard={OpenCard} UserData={profileData?.ownerData} /> : null}
                 <div className='mt-12'>
-                    {userPosts.map((post: any, index: number) => {
-                        return <div key={index}><PostCard Post={post} UserData={UserData} /></div>
+                    {profileData?.ownerPosts.map((post: any, index: number) => {
+                        return <div key={index}><PostCard Post={post} myData={UserData} UserData={profileData.ownerData} /></div>
 
                     })}
 

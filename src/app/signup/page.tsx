@@ -12,9 +12,10 @@ import RoleSelector from '../_components/RoleSelector/page';
 import { setCurrentAvatarIndex, setAvatarAnmition } from '@/lib/AvatarSlices';
 import AvatarIcons from '../_components/AvatarIcons/page';
 import axios, { AxiosResponse } from 'axios';
-import dotenv from "dotenv"
 import { Logging } from '@/lib/UserSlices';
 import { toast } from 'react-toastify';
+import dotenv from "dotenv"
+
 dotenv.config()
 
 export default function SignUp() {
