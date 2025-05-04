@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import PostCard from '../../_components/PostCard/page'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { StateFaces } from '../../../../InterFaces/StateFaces'
 import SpinnerLoader from '../../_components/SpinnerLoader/page'
 import EditProfile from '../../_components/EditProfile/page'
@@ -13,6 +13,9 @@ import { useParams } from 'next/navigation'
 import { TypeRole } from '../../../../InterFaces/StateUserSlices'
 import axios from 'axios'
 import dotenv from "dotenv"
+import ErrorPopup from '@/app/_components/ErrorPopup/page'
+import { SetProfileData } from '@/lib/ProfileSlices'
+import { ChangeUserPosts } from '@/lib/UserSlices'
 dotenv.config()
 
 export interface ProfileData {
@@ -36,12 +39,12 @@ interface PostDataPP {
 
 export default function Profile() {
     const { UID } = useParams()
+    const dispath = useDispatch()
     const [EditProfileBool, setEditProfileBool] = useState(false)
-    const { UserToken, UserData } = useSelector((state: StateFaces) => state.UserReducer)
-    const { userPosts } = useSelector((state: StateFaces) => state.PostsReducer)
+    const { UserToken, UserData, UserPosts } = useSelector((state: StateFaces) => state.UserReducer)
+    const { ProfileData } = useSelector((state: StateFaces) => state.ProfileReducer)
     const [pageLoading, setpageLoading] = useState(true)
     const [myProfile, setmyProfile] = useState(false)
-    const [profileData, setprofileData] = useState<null | ProfileData>(null)
     const roleIcons: StateRole = {
         Roam: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSEyr-9XP3T94ExZMEJ2J8hg14xy_EWv0hmjHl0F7BNWj77uX_P7W0X00msjDKG6UADPQ&usqp=CAU",
         Exp: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJW9ariSN-A0F8ZSWzFPXrWeXyET8yc66DySpavga2uCrme6dkHfVFs1vcAPcVW69l3vI&usqp=CAU",
@@ -66,13 +69,13 @@ export default function Profile() {
         try {
             const data = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/${UID}`, { headers })
             console.log(data);
-            setprofileData({ ownerData: { username: data.data.ownerData?.username, avatar: data.data.ownerData?.avatar, role: data.data.ownerData?.role, gender: data.data.ownerData?.gender, popularity: data.data.ownerData?.popularity, UID: data.data.ownerData?.UID }, ownerPosts: data.data?.ownerPosts })
-            setmyProfile(false)
+            dispath(SetProfileData(data.data))
+            if (myProfile) { dispath(ChangeUserPosts(data.data.ownerPosts)) }
+            UserData?.UID != UID && setmyProfile(false)
             setpageLoading(false)
 
         } catch (err) {
             console.log(err);
-
         }
     }
 
@@ -80,9 +83,11 @@ export default function Profile() {
     const [showModal, setShowModal] = useState(false);
     useEffect(() => {
         if (UID === UserData?.UID) {
-            UserData && setprofileData({ ownerData: { username: UserData?.username, avatar: UserData?.avatar, role: UserData?.role, gender: UserData?.gender, popularity: UserData?.popularity, UID: UserData?.UID }, ownerPosts: userPosts })
+            // UserData && setprofileData({ ownerData: { username: UserData?.username, avatar: UserData?.avatar, role: UserData?.role, gender: UserData?.gender, popularity: UserData?.popularity, UID: UserData?.UID }, ownerPosts: userPosts })
             setmyProfile(true)
-            setpageLoading(false)
+            // setpageLoading(false)
+            GetProfile()
+
         } else {
             GetProfile()
 
@@ -104,9 +109,16 @@ export default function Profile() {
     }, [showModal, setShowModal]);
 
 
+    useEffect(() => {
+        console.log(UserPosts);
+
+    }, [UserPosts])
+
+
     function EditProfileFromChild() {
         setEditProfileBool(false)
     }
+
 
 
     if (!UserToken) {
@@ -130,20 +142,20 @@ export default function Profile() {
                         <div className="">
                             <img className='rounded-full w-35 h-28 object-fill '
                                 alt="User Avatar"
-                                src={profileData?.ownerData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
+                                src={ProfileData?.ownerData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
                         </div>
                         <div className='flex flex-col'>
                             <div className='flex flex-row'>
-                                <h1 className='text-4xl'>{profileData?.ownerData.username ?? "Player Name"}</h1>
-                                <i className='pl-4 font-bold'>{profileData?.ownerData.gender === "Male" ? <i className="fa-solid fa-mars text-xl text-green-600"></i> : <i className="fa-solid fa-venus text-xl text-pink-600"></i>}</i>
-                                <img className='w-8 ml-6 object-cover ' src={roleIcons[profileData?.ownerData?.role ?? "Roam"]} alt="Role Icon" />
+                                <h1 className='text-4xl'>{ProfileData?.ownerData.username ?? "Player Name"}</h1>
+                                <i className='pl-4 font-bold'>{ProfileData?.ownerData.gender === "Male" ? <i className="fa-solid fa-mars text-xl text-green-600"></i> : <i className="fa-solid fa-venus text-xl text-pink-600"></i>}</i>
+                                <img className='w-8 ml-6 object-cover ' src={roleIcons[ProfileData?.ownerData?.role ?? "Roam"]} alt="Role Icon" />
 
                             </div>
                             <div className='flex flex-col pt-4'>
-                                {profileData?.ownerData?.popularity ?? 0 <= 0 ? <i className="fa-solid fa-gift pl-1.5 text-lg"></i> : <img className='w-14 object-fill ' src={popularity} alt="popularity" />
+                                {ProfileData?.ownerData?.popularity ?? 0 <= 0 ? <i className="fa-solid fa-gift pl-1.5 text-lg"></i> : <img className='w-14 object-fill ' src={popularity} alt="popularity" />
                                 }
                             </div>
-                            <h1 className={`${profileData?.ownerData?.popularity ?? 0 <= 0 ? "pl-2.5" : "pl-5"}`}>0</h1>
+                            <h1 className={`${ProfileData?.ownerData?.popularity ?? 0 <= 0 ? "pl-2.5" : "pl-5"}`}>0</h1>
                             {/* <h4 className='text-xl opacity-50'>Friends : {UserData.friends}</h4> */}
                         </div>
                     </div>
@@ -152,10 +164,13 @@ export default function Profile() {
                     </div>
 
                 </div>
-                {myProfile ? <AddPost OpenCard={OpenCard} UserData={profileData?.ownerData} /> : null}
+                {myProfile ? <AddPost OpenCard={OpenCard} UserData={ProfileData?.ownerData} /> : null}
                 <div className='mt-12'>
-                    {profileData?.ownerPosts.map((post: any, index: number) => {
-                        return <div key={index}><PostCard Post={post} myData={UserData} UserData={profileData.ownerData} /></div>
+                    {myProfile ? UserPosts?.map((post: any, index: number) => {
+                        return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} UserData={ProfileData.ownerData} /></div>
+
+                    }) : ProfileData?.ownerPosts.map((post: any, index: number) => {
+                        return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} UserData={ProfileData.ownerData} /></div>
 
                     })}
 

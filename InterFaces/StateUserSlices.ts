@@ -13,6 +13,7 @@ export interface StateUserSlices {
     UID: null | number;
   };
   UserLoading: boolean;
+  UserPosts: null | any[];
 }
 
 export interface StateUserData {

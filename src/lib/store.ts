@@ -3,6 +3,7 @@ import { CounterReducer } from "./CounterSlices";
 import { PostsReducer } from "./PostsSlices";
 import { UserReducer } from "./UserSlices";
 import { AvatarReducer } from "./AvatarSlices";
+import { ProfileReducer } from "./ProfileSlices";
 
 export let Store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export let Store = configureStore({
     PostsReducer,
     UserReducer,
     AvatarReducer,
+    ProfileReducer,
   },
 });

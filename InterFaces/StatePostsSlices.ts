@@ -25,7 +25,7 @@ export interface StatePostData {
 }
 
 export interface postData {
-  user_id: number;
+  id: number;
   body: string;
   files: string[];
   created_at: string;

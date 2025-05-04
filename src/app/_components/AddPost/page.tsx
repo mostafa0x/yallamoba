@@ -11,7 +11,7 @@ export default function page(props: any) {
                     <img
                         className="rounded-full w-full h-full object-cover"
                         alt="User Avatar"
-                        src={props.UserData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
+                        src={props.UserData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
 
                 </div>
                 <input onClick={() => props.OpenCard()}

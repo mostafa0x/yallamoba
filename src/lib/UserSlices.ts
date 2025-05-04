@@ -15,6 +15,7 @@ const initialState: StateUserSlices = {
     UID: null,
   },
   UserLoading: true,
+  UserPosts: null,
 };
 
 const UserSlices = createSlice({
@@ -29,6 +30,9 @@ const UserSlices = createSlice({
     },
     ChangeUserLoading: (state, action) => {
       state.UserLoading = action.payload;
+    },
+    ChangeUserPosts: (state, action) => {
+      state.UserPosts = action.payload;
     },
     Logging: (state, action) => {
       state.UserToken = action.payload.UserToken;
@@ -57,6 +61,7 @@ export const {
   ChangeUserToken,
   ChangeUserData,
   ChangeUserLoading,
+  ChangeUserPosts,
   Logging,
   logOut,
 } = UserSlices.actions;

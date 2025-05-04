@@ -4,8 +4,10 @@ import { postData, StatePostData } from '../../../../InterFaces/StatePostsSlices
 import { ProfileData } from '@/app/profile/[UID]/page';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useSelector } from 'react-redux';
+import { StateFaces } from '../../../../InterFaces/StateFaces';
+import axios from 'axios';
 dayjs.extend(relativeTime);
-
 
 interface Userdata {
     username: null | string;
@@ -19,10 +21,29 @@ interface Props {
     UserData: Userdata | null | undefined;
     Post: postData
     myData: Userdata | undefined | null
+    myProfile: boolean
 }
 
-export default function PostCard({ UserData, Post, myData }: Props) {
+export default function PostCard({ UserData, Post, myData, myProfile
+}: Props) {
     const TimePost = dayjs(Post.updated_at).fromNow();
+    const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
+    const headers: any = {
+        authorization: `Bearer ${UserToken}`
+    }
+
+    async function DeletePost(postID: number) {
+
+        try {
+            const data = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${postID}`, { headers })
+            console.log(data);
+
+
+        } catch (err) {
+            console.log(err);
+
+        }
+    }
 
     return (
         <div className="bg-white rounded-lg shadow-md p-4 mb-6 border border-gray-200 max-w-2xl mx-auto">
@@ -39,14 +60,14 @@ export default function PostCard({ UserData, Post, myData }: Props) {
                         <p className="text-sm text-gray-500">{TimePost}</p>
                     </div>
                 </div>
-                <div className="dropdown">
+                {myProfile ? <div className="dropdown">
                     <div tabIndex={0} role="button" className=""> <i className="fa-solid fa-ellipsis cursor-pointer text-gray-500 hover:text-gray-700" />
                     </div>
                     <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 gap-3 w-52 p-2 shadow-sm">
                         <li><a><i className="fa-solid fa-pen"></i>Edit</a></li>
-                        <li><a className='text-red-500 '><i className="fa-solid fa-trash"></i> Delete</a></li>
+                        <li onClick={() => DeletePost(Post.id)}><a className='text-red-500 '><i className="fa-solid fa-trash"></i> Delete</a></li>
                     </ul>
-                </div>
+                </div> : null}
             </div>
 
             {/* Body text */}
@@ -56,8 +77,8 @@ export default function PostCard({ UserData, Post, myData }: Props) {
 
             {/* Media (Image or Video) */}
             <div className="rounded-lg overflow-hidden mb-3">
-                {Post.files ? <img
-                    src={Post.files[0] ?? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"}
+                {Post?.files?.length > 0 ? <img
+                    src={Post.files[0]}
                     alt="Post"
                     className="w-full h-auto max-h-[400px] object-cover"
                 /> : null}

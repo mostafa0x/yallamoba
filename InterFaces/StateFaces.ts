@@ -1,4 +1,5 @@
 import { StatePostsSlices } from "./StatePostsSlices";
+import { StateProfileSlices } from "./StateProfileSlices";
 import { StateUserSlices } from "./StateUserSlices";
 
 export interface StateFaces {
@@ -12,4 +13,5 @@ export interface StateFaces {
     currentAvatarIndex: number;
     AvatarAnmition: number;
   };
+  ProfileReducer: { ProfileData: StateProfileSlices };
 }
