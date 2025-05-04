@@ -8,6 +8,9 @@ import NavBar from "./_components/NavBar/page";
 import ProtectRouting from "./_components/ProtectRouting/page";
 import { ToastContainer, Bounce } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 
 export default function RootLayout({

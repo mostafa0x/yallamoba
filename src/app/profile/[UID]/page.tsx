@@ -18,24 +18,7 @@ import { SetProfileData } from '@/lib/ProfileSlices'
 import { ChangeUserPosts } from '@/lib/UserSlices'
 dotenv.config()
 
-export interface ProfileData {
-    ownerData: {
-        username: null | string;
-        avatar: null | string;
-        role: null | TypeRole;
-        gender: null | string;
-        popularity: number;
-        UID: null | number;
-    }, ownerPosts: PostDataPP[]
-}
 
-interface PostDataPP {
-    body: string,
-    created_at: string
-    files: string[]
-    id: string;
-    updated_at: string
-}
 
 export default function Profile() {
     const { UID } = useParams()
@@ -68,10 +51,10 @@ export default function Profile() {
     async function GetProfile() {
         try {
             const data = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/${UID}`, { headers })
-            console.log(data);
             dispath(SetProfileData(data.data))
-            if (myProfile) { dispath(ChangeUserPosts(data.data.ownerPosts)) }
-            UserData?.UID != UID && setmyProfile(false)
+            if (UserData?.UID === UID) {
+                dispath(ChangeUserPosts(data.data.ownerPosts))
+            }
             setpageLoading(false)
 
         } catch (err) {
@@ -89,8 +72,8 @@ export default function Profile() {
             GetProfile()
 
         } else {
+            setmyProfile(false)
             GetProfile()
-
         }
 
 
@@ -109,10 +92,6 @@ export default function Profile() {
     }, [showModal, setShowModal]);
 
 
-    useEffect(() => {
-        console.log(UserPosts);
-
-    }, [UserPosts])
 
 
     function EditProfileFromChild() {
@@ -171,7 +150,6 @@ export default function Profile() {
 
                     }) : ProfileData?.ownerPosts.map((post: any, index: number) => {
                         return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} UserData={ProfileData.ownerData} /></div>
-
                     })}
 
                 </div>

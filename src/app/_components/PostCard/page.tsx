@@ -1,13 +1,16 @@
 import React from 'react'
 import { StateUserData, TypeRole } from '../../../../InterFaces/StateUserSlices'
 import { postData, StatePostData } from '../../../../InterFaces/StatePostsSlices';
-import { ProfileData } from '@/app/profile/[UID]/page';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useSelector } from 'react-redux';
 import { StateFaces } from '../../../../InterFaces/StateFaces';
 import axios from 'axios';
 dayjs.extend(relativeTime);
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 interface Userdata {
     username: null | string;
@@ -76,18 +79,47 @@ export default function PostCard({ UserData, Post, myData, myProfile
             </p>
 
             {/* Media (Image or Video) */}
-            <div className="rounded-lg overflow-hidden mb-3">
-                {Post?.files?.length > 0 ? <img
-                    src={Post.files[0]}
-                    alt="Post"
-                    className="w-full h-auto max-h-[400px] object-cover"
-                /> : null}
+            {Post?.files?.length > 0 && (
+                <div className="mb-4">
+                    <Slider
+                        dots={true}
+                        infinite={false}
+                        speed={500}
+                        slidesToShow={1}
+                        slidesToScroll={1}
+                        arrows={true}
+                    >
+                        {Post.files.map((fileUrl, index) => {
+                            const extension = fileUrl.split('.').pop()?.toLowerCase();
+                            const isImage = ['jpg', 'jpeg', 'png', 'gif'].includes(extension || '');
+                            const isVideo = ['mp4', 'mov', 'avi'].includes(extension || '');
 
-                {/* لو عايز تحط فيديو بدل الصورة:
-    <video controls className="w-full rounded-lg">
-      <source src="your-video-url.mp4" type="video/mp4" />
-    </video> */}
-            </div>
+                            return (
+                                <div key={index} className="w-full">
+                                    {isImage && (
+                                        <img
+                                            src={fileUrl}
+                                            alt={`Post media ${index}`}
+                                            className="w-full h-auto max-h-[500px] object-contain rounded"
+                                        />
+                                    )}
+                                    {isVideo && (
+                                        <video
+                                            controls
+                                            className="w-full max-h-[500px] rounded"
+                                        >
+                                            <source src={fileUrl} type={`video/${extension}`} />
+                                            المتصفح لا يدعم تشغيل هذا الفيديو.
+                                        </video>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </Slider>
+                </div>
+            )}
+
+
 
             {/* Reactions Count */}
             <div className="flex justify-between items-center text-sm text-gray-500  py-2">

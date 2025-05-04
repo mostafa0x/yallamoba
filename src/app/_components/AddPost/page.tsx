@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import AddPostCard from "../AddPostCard/page"
 export default function page(props: any) {
 
 
@@ -18,6 +17,7 @@ export default function page(props: any) {
                     className="flex-1 bg-gray-100 hover:bg-gray-300 text-sm px-4 py-2 rounded-full outline-none cursor-pointer"
                     type="text"
                     placeholder="What's on your mind?"
+                    readOnly
                 />
             </div>
 

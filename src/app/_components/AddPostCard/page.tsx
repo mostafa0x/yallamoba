@@ -8,6 +8,7 @@ import axios, { AxiosError } from 'axios';
 import * as yup from "yup"
 import { toast } from 'react-toastify';
 import ErrorPopup from '../ErrorPopup/page';
+import { ChangeUserPosts } from '@/lib/UserSlices';
 type formValues = {
     body: string,
     files: File | string
@@ -18,7 +19,7 @@ export default function AddPostCard(props: any) {
     const [errorPopup, seterrorPopup] = useState<string | null>(null)
     const [btnPostLoading, setbtnPostLoading] = useState(false)
 
-    const { UserData, UserToken } = useSelector((state: StateFaces) => state.UserReducer)
+    const { UserData, UserToken, UserPosts } = useSelector((state: StateFaces) => state.UserReducer)
     const dispath = useDispatch()
     const headers: any = {
         authorization: `Bearer ${UserToken}`
@@ -29,8 +30,8 @@ export default function AddPostCard(props: any) {
         setbtnPostLoading(true)
         try {
             const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`, fromdata, { headers })
-            console.log(data);
 
+            dispath(ChangeUserPosts(data.data.allPosts))
             props.SetFromChild()
 
 
@@ -79,7 +80,6 @@ export default function AddPostCard(props: any) {
 
     function showBodyError() {
         Formik.errors.body && toast.error(Formik.errors.body)
-        //  Formik.setFieldError("body", undefined)
     }
 
 
@@ -111,7 +111,7 @@ export default function AddPostCard(props: any) {
                             name="files"
                             id="file-upload"
                             type="file"
-                            accept="image/*,video/*"
+                            accept=".png,.jpg,.jpeg,.gif,.mp4,.mov,.avi"
                             className="hidden"
                             onChange={handleFileChange}
 
