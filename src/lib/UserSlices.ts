@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 const initialState: StateUserSlices = {
   UserToken: null,
+  headers: { authorization: "" },
   UserData: {
     username: null,
     avatar: null,
@@ -24,6 +25,9 @@ const UserSlices = createSlice({
   reducers: {
     ChangeUserToken: (state, action) => {
       state.UserToken = action.payload;
+      state.headers = {
+        authorization: `Bearer ${action.payload}`,
+      };
     },
     ChangeUserData: (state, action) => {
       state.UserData = action.payload;
@@ -33,6 +37,9 @@ const UserSlices = createSlice({
     },
     ChangeUserPosts: (state, action) => {
       state.UserPosts = action.payload;
+    },
+    AddToUserPosts: (state, action) => {
+      state.UserPosts?.unshift(action.payload);
     },
     RemovePostFromUserPosts: (state, action) => {
       const newUserPosts: any | undefined[] = state.UserPosts?.filter(
@@ -70,6 +77,7 @@ export const {
   ChangeUserData,
   ChangeUserLoading,
   ChangeUserPosts,
+  AddToUserPosts,
   RemovePostFromUserPosts,
   Logging,
   logOut,

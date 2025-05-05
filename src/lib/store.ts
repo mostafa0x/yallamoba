@@ -5,7 +5,7 @@ import { UserReducer } from "./UserSlices";
 import { AvatarReducer } from "./AvatarSlices";
 import { ProfileReducer } from "./ProfileSlices";
 
-export let Store = configureStore({
+export const Store = configureStore({
   reducer: {
     CounterReducer,
     PostsReducer,
@@ -14,3 +14,5 @@ export let Store = configureStore({
     ProfileReducer,
   },
 });
+
+export type RootState = ReturnType<typeof Store.getState>;

@@ -8,7 +8,8 @@ import axios, { AxiosError } from 'axios';
 import * as yup from "yup"
 import { toast } from 'react-toastify';
 import ErrorPopup from '../ErrorPopup/page';
-import { ChangeUserPosts } from '@/lib/UserSlices';
+import { AddToUserPosts } from '@/lib/UserSlices';
+
 type formValues = {
     body: string,
     files: File | string
@@ -25,23 +26,19 @@ export default function AddPostCard(props: any) {
         authorization: `Bearer ${UserToken}`
     }
 
-    async function GetProfile(fromdata: any) {
+    async function AddPost(fromdata: any) {
         console.log(fromdata);
         setbtnPostLoading(true)
         try {
             const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`, fromdata, { headers })
-
-            dispath(ChangeUserPosts(data.data.allPosts))
+            dispath(AddToUserPosts(data.data.newPost))
             props.SetFromChild()
-
-
         } catch (err: any) {
             console.log(err);
             seterrorPopup(err.response.data.error)
 
         } finally {
             setbtnPostLoading(false)
-
         }
     }
 
@@ -49,7 +46,6 @@ export default function AddPostCard(props: any) {
         seterrorPopup(null)
     }
     function handleAddPost(formValues: formValues) {
-        //  props.SetFromChild()
         console.log(formValues);
         const fromdata = new FormData()
         fromdata.append("body", formValues.body)
@@ -57,7 +53,7 @@ export default function AddPostCard(props: any) {
             formValues.files.forEach((file: File) => {
                 fromdata.append("files", file);
             });
-        } GetProfile(fromdata)
+        } AddPost(fromdata)
 
     }
     const validationSchema = yup.object().shape({
@@ -84,11 +80,9 @@ export default function AddPostCard(props: any) {
 
 
 
-
     return (
         <>
             {errorPopup ? <ErrorPopup errorMes={errorPopup} CloseErrorPopup={CloseErrorPopup} /> : null}
-
             <div className="fixed inset-0 flex items-center backdrop-blur justify-center z-50"
                 style={{ backgroundColor: 'rgba(55, 65, 81, 0.5)' }} >
                 <div className="bg-white p-6 rounded shadow-lg w-11/12 max-w-md">

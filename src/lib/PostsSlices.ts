@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { StatePostsSlices } from "../../InterFaces/StatePostsSlices";
 
 export const GetAllPosts = createAsyncThunk(
   "PostsSlices/GetAllPosts",
@@ -12,7 +11,7 @@ export const GetAllPosts = createAsyncThunk(
   }
 );
 
-const initialState: StatePostsSlices = { allPosts: [], userPosts: [] };
+const initialState = { allPosts: [] };
 
 const PostsSlices = createSlice({
   name: "PostsSlices",
@@ -22,12 +21,8 @@ const PostsSlices = createSlice({
       state.allPosts = action.payload;
     });
   },
-  reducers: {
-    AddPostTouserPost: (state, action) => {
-      state.userPosts.push(action.payload);
-    },
-  },
+  reducers: {},
 });
 
 export const PostsReducer = PostsSlices.reducer;
-export const { AddPostTouserPost } = PostsSlices.actions;
+export const {} = PostsSlices.actions;

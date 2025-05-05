@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { StateUserData, TypeRole } from '../../../../InterFaces/StateUserSlices'
-import { postData, StatePostData } from '../../../../InterFaces/StatePostsSlices';
+import { UserDataType } from '../../../../InterFaces/StateUserSlices'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,34 +11,25 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { RemovePostFromUserPosts } from '@/lib/UserSlices';
 import { toast } from 'react-toastify';
+import { PostDataType } from '../../../../InterFaces/StateProfileSlices';
 
 
-interface Userdata {
-    username: null | string;
-    avatar: null | string;
-    role: null | TypeRole;
-    gender: null | string;
-    popularity: number;
-    UID: null | number;
-}
 interface Props {
-    UserData: Userdata | null | undefined;
-    Post: postData
-    myData: Userdata | undefined | null
+    OwnerData: UserDataType | null | undefined;
+    Post: PostDataType
+    myData: UserDataType | undefined | null
     myProfile: boolean
 
 }
 
-export default function PostCard({ UserData, Post, myData, myProfile
+export default function PostCard({ OwnerData, Post, myData, myProfile
 }: Props) {
     const TimePost = dayjs(Post.updated_at).fromNow();
-    const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
+    const { UserToken, headers } = useSelector((state: StateFaces) => state.UserReducer)
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [btnDeletPost, setbtnDeletPost] = useState(false)
-    const headers: any = {
-        authorization: `Bearer ${UserToken}`
-    }
+
     const dispath = useDispatch()
     async function DeletePost(postID: number) {
 
@@ -89,12 +79,12 @@ export default function PostCard({ UserData, Post, myData, myProfile
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
                     <img
-                        src={UserData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
+                        src={OwnerData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
                         alt="Post Avatar"
                         className="w-10 h-10 rounded-full"
                     />
                     <div>
-                        <p className="font-semibold">{UserData?.username}</p>
+                        <p className="font-semibold">{OwnerData?.username}</p>
                         <p className="text-sm text-gray-500">{TimePost}</p>
                     </div>
                 </div>

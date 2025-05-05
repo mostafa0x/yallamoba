@@ -8,12 +8,9 @@ import EditProfile from '../../_components/EditProfile/page'
 import AddPost from '../../_components/AddPost/page'
 import AddPostCard from '../../_components/AddPostCard/page'
 import { StateRole } from '../../../../InterFaces/StateRoleTypes'
-import { StatePostData } from '../../../../InterFaces/StatePostsSlices'
 import { useParams } from 'next/navigation'
-import { TypeRole } from '../../../../InterFaces/StateUserSlices'
 import axios from 'axios'
 import dotenv from "dotenv"
-import ErrorPopup from '@/app/_components/ErrorPopup/page'
 import { SetProfileData } from '@/lib/ProfileSlices'
 import { ChangeUserPosts } from '@/lib/UserSlices'
 dotenv.config()
@@ -146,10 +143,10 @@ export default function Profile() {
                 {myProfile ? <AddPost OpenCard={OpenCard} UserData={ProfileData?.ownerData} /> : null}
                 <div className='mt-12'>
                     {myProfile ? UserPosts?.map((post: any, index: number) => {
-                        return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} UserData={ProfileData.ownerData} /></div>
+                        return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} OwnerData={ProfileData.ownerData} /></div>
 
                     }) : ProfileData?.ownerPosts.map((post: any, index: number) => {
-                        return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} UserData={ProfileData.ownerData} /></div>
+                        return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} OwnerData={ProfileData.ownerData} /></div>
                     })}
 
                 </div>

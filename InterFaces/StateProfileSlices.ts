@@ -9,13 +9,13 @@ export interface StateProfileSlices {
     popularity: number;
     UID: null | number;
   };
-  ownerPosts: [
-    {
-      id: number;
-      body: string;
-      files: string[];
-      created_at: string;
-      updated_at: string;
-    }
-  ];
+  ownerPosts: PostDataType[];
+}
+
+export interface PostDataType {
+  id: number;
+  body: string;
+  files: string[];
+  created_at: string;
+  updated_at: string;
 }
