@@ -34,6 +34,14 @@ const UserSlices = createSlice({
     ChangeUserPosts: (state, action) => {
       state.UserPosts = action.payload;
     },
+    RemovePostFromUserPosts: (state, action) => {
+      const newUserPosts: any | undefined[] = state.UserPosts?.filter(
+        (post) => {
+          return post.id !== action.payload;
+        }
+      );
+      state.UserPosts = newUserPosts;
+    },
     Logging: (state, action) => {
       state.UserToken = action.payload.UserToken;
       state.UserData = action.payload.UserData;
@@ -62,6 +70,7 @@ export const {
   ChangeUserData,
   ChangeUserLoading,
   ChangeUserPosts,
+  RemovePostFromUserPosts,
   Logging,
   logOut,
 } = UserSlices.actions;

@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StateUserData, TypeRole } from '../../../../InterFaces/StateUserSlices'
 import { postData, StatePostData } from '../../../../InterFaces/StatePostsSlices';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StateFaces } from '../../../../InterFaces/StateFaces';
 import axios from 'axios';
 dayjs.extend(relativeTime);
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { RemovePostFromUserPosts } from '@/lib/UserSlices';
+import { toast } from 'react-toastify';
 
 
 interface Userdata {
@@ -25,28 +27,61 @@ interface Props {
     Post: postData
     myData: Userdata | undefined | null
     myProfile: boolean
+
 }
 
 export default function PostCard({ UserData, Post, myData, myProfile
 }: Props) {
     const TimePost = dayjs(Post.updated_at).fromNow();
     const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
+    const [open, setOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [btnDeletPost, setbtnDeletPost] = useState(false)
     const headers: any = {
         authorization: `Bearer ${UserToken}`
     }
-
+    const dispath = useDispatch()
     async function DeletePost(postID: number) {
 
         try {
             const data = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${postID}`, { headers })
             console.log(data);
-
-
+            dispath(RemovePostFromUserPosts(postID))
         } catch (err) {
             console.log(err);
 
         }
     }
+    const handleDelete = async (postID: number) => {
+        if (!btnDeletPost) {
+            const WaitingDelete = toast.loading("Wait to delete post ..")
+            setbtnDeletPost(true)
+            try {
+                await DeletePost(postID);
+                toast.success("Post deleted successfully")
+                setOpen(false);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setbtnDeletPost(false)
+                toast.dismiss(WaitingDelete)
+
+            }
+        }
+    };
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className="bg-white rounded-lg shadow-md p-4 mb-6 border border-gray-200 max-w-2xl mx-auto">
@@ -63,14 +98,36 @@ export default function PostCard({ UserData, Post, myData, myProfile
                         <p className="text-sm text-gray-500">{TimePost}</p>
                     </div>
                 </div>
-                {myProfile ? <div className="dropdown">
-                    <div tabIndex={0} role="button" className=""> <i className="fa-solid fa-ellipsis cursor-pointer text-gray-500 hover:text-gray-700" />
+                {myProfile ? <div className="relative" ref={dropdownRef}>
+                    <div onClick={() => setOpen(prev => !prev)} role="button">
+                        <i className="fa-solid fa-ellipsis cursor-pointer text-gray-500 hover:text-gray-700" />
                     </div>
-                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 gap-3 w-52 p-2 shadow-sm">
-                        <li><a><i className="fa-solid fa-pen"></i>Edit</a></li>
-                        <li onClick={() => DeletePost(Post.id)}><a className='text-red-500 '><i className="fa-solid fa-trash"></i> Delete</a></li>
-                    </ul>
-                </div> : null}
+
+                    {open && (
+                        <ul className="absolute right-0 mt-2 menu bg-base-100 rounded-box z-10 gap-3 w-52 p-2 shadow-sm">
+                            <li>
+                                <a><i className="fa-solid fa-pen"></i> Edit</a>
+                            </li>
+                            <li>
+                                <a
+                                    onClick={() => handleDelete(Post.id)}
+                                    className="text-red-500"
+                                >
+                                    {btnDeletPost ? <h1><span className="loading loading-spinner loading-xl"></span>
+                                        Deleting</h1> : <>
+                                        <i className="fa-solid fa-trash"></i>
+                                        Delete
+                                    </>
+                                    }
+
+
+                                </a>
+                            </li>
+                        </ul>
+                    )}
+                </div>
+
+                    : null}
             </div>
 
             {/* Body text */}
@@ -85,11 +142,11 @@ export default function PostCard({ UserData, Post, myData, myProfile
                         dots={true}
                         infinite={false}
                         speed={500}
-                        slidesToShow={1}
+                        slidesToShow={Post.files.length >= 4 ? 4 : Post.files.length}
                         slidesToScroll={1}
                         arrows={true}
                     >
-                        {Post.files.map((fileUrl, index) => {
+                        {Post.files.map((fileUrl: string, index: number) => {
                             const extension = fileUrl.split('.').pop()?.toLowerCase();
                             const isImage = ['jpg', 'jpeg', 'png', 'gif'].includes(extension || '');
                             const isVideo = ['mp4', 'mov', 'avi'].includes(extension || '');
@@ -162,3 +219,7 @@ export default function PostCard({ UserData, Post, myData, myProfile
 
     )
 }
+function dispath(arg0: any) {
+    throw new Error('Function not implemented.');
+}
+
