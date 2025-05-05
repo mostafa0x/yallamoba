@@ -1,8 +1,6 @@
-import { AddPostTouserPost } from '@/lib/PostsSlices';
 import { Formik, useFormik } from 'formik';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { StatePostData } from '../../../../InterFaces/StatePostsSlices';
 import { StateFaces } from '../../../../InterFaces/StateFaces';
 import axios, { AxiosError } from 'axios';
 import * as yup from "yup"
@@ -26,15 +24,17 @@ export default function AddPostCard(props: any) {
         authorization: `Bearer ${UserToken}`
     }
 
-    async function AddPost(fromdata: any) {
+    async function ReqAddPost(fromdata: any) {
         console.log(fromdata);
         setbtnPostLoading(true)
         try {
             const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`, fromdata, { headers })
             dispath(AddToUserPosts(data.data.newPost))
+            toast.success("The post has been added successfully.")
             props.SetFromChild()
         } catch (err: any) {
             console.log(err);
+            toast.error("Error while adding post")
             seterrorPopup(err.response.data.error)
 
         } finally {
@@ -46,14 +46,13 @@ export default function AddPostCard(props: any) {
         seterrorPopup(null)
     }
     function handleAddPost(formValues: formValues) {
-        console.log(formValues);
         const fromdata = new FormData()
         fromdata.append("body", formValues.body)
         if (Array.isArray(formValues.files)) {
             formValues.files.forEach((file: File) => {
                 fromdata.append("files", file);
             });
-        } AddPost(fromdata)
+        } ReqAddPost(fromdata)
 
     }
     const validationSchema = yup.object().shape({
@@ -83,7 +82,7 @@ export default function AddPostCard(props: any) {
     return (
         <>
             {errorPopup ? <ErrorPopup errorMes={errorPopup} CloseErrorPopup={CloseErrorPopup} /> : null}
-            <div className="fixed inset-0 flex items-center backdrop-blur justify-center z-50"
+            <div className="fixed inset-0 flex items-center backdrop-blur justify-center z-50 animate-fade animate-once"
                 style={{ backgroundColor: 'rgba(55, 65, 81, 0.5)' }} >
                 <div className="bg-white p-6 rounded shadow-lg w-11/12 max-w-md">
                     <h2 className="text-xl font-bold mb-4">Add Post</h2>

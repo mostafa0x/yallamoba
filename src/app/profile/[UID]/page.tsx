@@ -14,6 +14,7 @@ import dotenv from "dotenv"
 import { SetProfileData } from '@/lib/ProfileSlices'
 import { ChangeUserPosts } from '@/lib/UserSlices'
 import FillUserState from '@/app/_Functions/FillUserState'
+import Image from 'next/image'
 dotenv.config()
 
 
@@ -26,6 +27,7 @@ export default function Profile() {
     const { ProfileData } = useSelector((state: StateFaces) => state.ProfileReducer)
     const [pageLoading, setpageLoading] = useState(true)
     const [myProfile, setmyProfile] = useState(false)
+    const [loadingPost, setloadingPost] = useState(true)
     const roleIcons: StateRole = {
         Roam: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSEyr-9XP3T94ExZMEJ2J8hg14xy_EWv0hmjHl0F7BNWj77uX_P7W0X00msjDKG6UADPQ&usqp=CAU",
         Exp: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJW9ariSN-A0F8ZSWzFPXrWeXyET8yc66DySpavga2uCrme6dkHfVFs1vcAPcVW69l3vI&usqp=CAU",
@@ -58,6 +60,8 @@ export default function Profile() {
 
         } catch (err) {
             console.log(err);
+        } finally {
+            setloadingPost(false)
         }
     }
 
@@ -65,8 +69,12 @@ export default function Profile() {
     const [showModal, setShowModal] = useState(false);
     useEffect(() => {
         if (UID === UserData?.UID) {
+            dispath(SetProfileData({ ownerData: UserData, ownerPosts: null }))
+
             // UserData && setprofileData({ ownerData: { username: UserData?.username, avatar: UserData?.avatar, role: UserData?.role, gender: UserData?.gender, popularity: UserData?.popularity, UID: UserData?.UID }, ownerPosts: userPosts })
             setmyProfile(true)
+            setpageLoading(false)
+
             // setpageLoading(false)
             GetProfile()
 
@@ -79,6 +87,7 @@ export default function Profile() {
         return () => {
             setpageLoading(true)
             setmyProfile(false)
+            setloadingPost(true)
         }
     }, [])
     useEffect(() => {
@@ -143,15 +152,23 @@ export default function Profile() {
 
                 </div>
                 {myProfile ? <AddPost OpenCard={OpenCard} UserData={ProfileData?.ownerData} /> : null}
-                <div className='mt-12'>
-                    {myProfile ? UserPosts?.map((post: any, index: number) => {
-                        return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} OwnerData={ProfileData.ownerData} /></div>
+                {loadingPost ?
+                    <div className="flex items-center justify-center mt-20 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                        <div className="px-3 py-1 text-lg font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">loading...</div>
+                        <Image src={"/kaguraGif.gif"} width={100} height={100} alt="Loading" />
+                        {/* <img className='w-32' src="https://media0.giphy.com/media/dohh5f1ZT1iw5gkwji/giphy.gif?cid=6c09b952myqsk2h2jjxfl22zbemerc7fxpzn82z2txnb15nv&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=s" alt="loading  icon" /> */}
+                    </div>
+                    : <div className='mt-12'>
+                        {myProfile ? UserPosts?.map((post: any, index: number) => {
+                            return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} OwnerData={ProfileData.ownerData} /></div>
 
-                    }) : ProfileData?.ownerPosts.map((post: any, index: number) => {
-                        return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} OwnerData={ProfileData.ownerData} /></div>
-                    })}
+                        }) : ProfileData?.ownerPosts.map((post: any, index: number) => {
+                            return <div key={index}><PostCard Post={post} myProfile={myProfile} myData={UserData} OwnerData={ProfileData.ownerData} /></div>
+                        })}
 
-                </div>
+                    </div>}
+
+
 
             </div>
         </>

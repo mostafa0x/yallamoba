@@ -41,7 +41,7 @@ export default function Login() {
             setBtnLogin(true)
             try {
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues)
-                Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
+                Dispath(Logging({ UserToken: data.data.userToken, UserData: data.data.userData }))
                 toast.success("Login successfully")
 
             } catch (err: any) {

@@ -74,7 +74,7 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
     }, []);
 
     return (
-        <div className="bg-white rounded-lg shadow-md p-4 mb-6 border border-gray-200 max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-md p-4 mb-6 border border-gray-200 max-w-2xl mx-auto animate-fade animate-once">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
@@ -132,8 +132,8 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
                         dots={true}
                         infinite={false}
                         speed={500}
-                        slidesToShow={Post.files.length >= 4 ? 4 : Post.files.length}
-                        slidesToScroll={1}
+                        slidesToShow={Post.files.length >= 2 ? 2 : Post.files.length}
+                        slidesToScroll={2}
                         arrows={true}
                     >
                         {Post.files.map((fileUrl: string, index: number) => {

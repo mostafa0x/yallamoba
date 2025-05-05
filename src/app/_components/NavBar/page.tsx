@@ -64,7 +64,7 @@ export default function NavBar() {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box -z-30 mt-3 w-52 p-2 shadow">
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box -z-30 mt-3 w-32 p-2 shadow">
                             <li>
                                 <Link href={`/profile/${UserData?.UID}`}>
                                     <i className="justify-between">
@@ -74,8 +74,9 @@ export default function NavBar() {
                             </li>
                             <li><i >Settings</i></li>
                             <li><i onClick={() => {
-                                dispath(logOut(null))
                                 Router.push("/signin")
+
+                                dispath(logOut(null))
                             }}>Logout</i></li>
                         </ul>
                     </div>
