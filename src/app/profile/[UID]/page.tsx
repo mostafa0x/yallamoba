@@ -13,6 +13,7 @@ import axios from 'axios'
 import dotenv from "dotenv"
 import { SetProfileData } from '@/lib/ProfileSlices'
 import { ChangeUserPosts } from '@/lib/UserSlices'
+import FillUserState from '@/app/_Functions/FillUserState'
 dotenv.config()
 
 
@@ -51,6 +52,7 @@ export default function Profile() {
             dispath(SetProfileData(data.data))
             if (UserData?.UID === UID) {
                 dispath(ChangeUserPosts(data.data.ownerPosts))
+                FillUserState(data.data, dispath)
             }
             setpageLoading(false)
 

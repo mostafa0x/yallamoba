@@ -32,6 +32,14 @@ const UserSlices = createSlice({
     ChangeUserData: (state, action) => {
       state.UserData = action.payload;
     },
+    fillUserData: (state, action) => {
+      if (state.UserData) {
+        state.UserData.username = action.payload.username;
+        state.UserData.role = action.payload.role;
+        state.UserData.avatar = action.payload.avatar;
+        localStorage.setItem("UserData", JSON.stringify(state.UserData));
+      }
+    },
     ChangeUserLoading: (state, action) => {
       state.UserLoading = action.payload;
     },
@@ -78,6 +86,7 @@ export const {
   ChangeUserLoading,
   ChangeUserPosts,
   AddToUserPosts,
+  fillUserData,
   RemovePostFromUserPosts,
   Logging,
   logOut,
