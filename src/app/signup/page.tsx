@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useFormik } from "formik"
 import * as yup from "yup"
 import { FormState } from "../../../InterFaces/FormState";
@@ -13,15 +13,16 @@ import { setCurrentAvatarIndex, setAvatarAnmition } from '@/lib/AvatarSlices';
 import AvatarIcons from '../_components/AvatarIcons/page';
 import axios, { AxiosResponse } from 'axios';
 import { Logging } from '@/lib/UserSlices';
-import { toast } from 'react-toastify';
+import { Id, toast } from 'react-toastify';
 import dotenv from "dotenv"
-
+import LoadingPopup from "../_components/LoadingPopup/page";
 dotenv.config()
 
 export default function SignUp() {
     const [PageAnime, setPageAnime] = useState(false)
     const [BtnSignUp, setBtnSignUp] = useState(false)
     const [resError, setresError] = useState(null)
+    const errorToastRef = useRef<Id | null>(null);
 
     const Router = useRouter()
     const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
@@ -47,6 +48,10 @@ export default function SignUp() {
 
     async function handleSignUp(formValues: FormState) {
         if (!BtnSignUp) {
+            if (errorToastRef.current) {
+                toast.dismiss(errorToastRef.current);
+                errorToastRef.current = null
+            }
             const WaitingToast = toast.loading("Waiting...")
             setresError(null)
             setBtnSignUp(true)
@@ -58,7 +63,7 @@ export default function SignUp() {
             } catch (err: any) {
                 setBtnSignUp(false)
                 setresError(err.response.data.error)
-                toast.error(err.response.data.error)
+                errorToastRef.current = toast.error(err.response.data.error)
                 throw new Error(err.response.data.error)
 
             } finally {
@@ -107,7 +112,9 @@ export default function SignUp() {
         return <SpinnerLoader />
     }
 
-    return (
+    return (<>
+        {BtnSignUp ? <LoadingPopup LoadingMessage={"Registering now"} wigthCard={390} /> : null}
+
         <div className={`min-h-screen flex items-center justify-center bg-gray-100  ${PageAnime ? "animate-jump-out animate-once" : "animate-fade-up animate-once"}`}>
             <form onSubmit={Formik.handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
                 <h2 className="text-blue-600 text-2xl font-bold mb-6 text-center">Create a new account</h2>
@@ -231,5 +238,6 @@ export default function SignUp() {
             </form>
 
         </div>
+    </>
     );
 }
