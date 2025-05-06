@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from 'react-redux';
 import { StateFaces } from '../../../InterFaces/StateFaces';
 import SpinnerLoader from '../_components/SpinnerLoader/page';
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { ChangeUserToken, Logging } from "@/lib/UserSlices";
 import dotenv from "dotenv"
 import { toast } from "react-toastify";
@@ -40,18 +40,26 @@ export default function Login() {
             setresError(null)
             setBtnLogin(true)
             try {
-                const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues)
-                Dispath(Logging({ UserToken: data.data.userToken, UserData: data.data.userData }))
+                const data: AxiosResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues)
+                console.log(data.data);
+
+                Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
                 toast.success("Login successfully")
 
             } catch (err: any) {
                 setBtnLogin(false)
-                setresError(err.response.data.error)
-                toast.error(err.response.data.error)
-                throw new Error(err.response.data.error)
+                if (err.message && err.message == "Network Error") {
+                    setresError(err.message)
+                    toast.error(err.message)
+                    throw new Error(err.message)
+                } else {
+                    setresError(err.response.data.error)
+                    toast.error(err.response.data.error)
+                    throw new Error(err.response.data.error)
+                }
+
             } finally {
                 toast.dismiss(WaitingToast)
-
             }
         }
     }

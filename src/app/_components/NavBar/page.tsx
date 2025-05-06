@@ -76,7 +76,7 @@ export default function NavBar() {
                             <li><i onClick={() => {
                                 Router.push("/signin")
 
-                                dispath(logOut(null))
+                                dispath(logOut("logout"))
                             }}>Logout</i></li>
                         </ul>
                     </div>

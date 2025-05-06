@@ -1,7 +1,7 @@
 import React, { MouseEvent, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFaces } from '../../../../InterFaces/StateFaces'
-import { usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { ChangeUserToken, ChangeUserData, ChangeUserLoading, logOut } from '@/lib/UserSlices'
 import SpinnerLoader from '../SpinnerLoader/page'
 import { toast } from 'react-toastify'
@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 export default function ProtectRouting({ children }: any) {
     const Router = useRouter()
     const Path = usePathname()
+    const { UID } = useParams()
     const { UserToken, UserData, UserLoading } = useSelector((state: StateFaces) => state.UserReducer)
     const dispatch = useDispatch()
 
@@ -66,6 +67,7 @@ export default function ProtectRouting({ children }: any) {
                     return
                 }
                 try {
+
                     const userDataJSON = JSON.parse(localData);
                     dispatch(ChangeUserData(userDataJSON));
 
@@ -73,7 +75,7 @@ export default function ProtectRouting({ children }: any) {
                 } catch (error) {
                     toast.error("Something error , login ")
                     console.error("Failed to parse user data:", error);
-                    dispatch(logOut(Router))
+                    dispatch(logOut(null))
                 }
             }
 
@@ -96,7 +98,7 @@ export default function ProtectRouting({ children }: any) {
             }
         }
 
-        if (Path === "/profile") {
+        if (Path === `/profile/${UID}`) {
             if (!localToken) {
                 Router.push("/signin")
             }

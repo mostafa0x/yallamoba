@@ -59,6 +59,8 @@ const UserSlices = createSlice({
       state.UserPosts = newUserPosts;
     },
     Logging: (state, action) => {
+      console.log(action.payload);
+
       state.UserToken = action.payload.UserToken;
       state.UserData = action.payload.UserData;
       const UserDataTxT = JSON.stringify(action.payload.UserData);
