@@ -1,10 +1,10 @@
 import { Formik, useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { StateFaces } from '../../../../InterFaces/StateFaces';
 import axios, { AxiosError } from 'axios';
 import * as yup from "yup"
-import { toast } from 'react-toastify';
+import { Id, toast } from 'react-toastify';
 import ErrorPopup from '../ErrorPopup/page';
 import { AddToUserPosts } from '@/lib/UserSlices';
 
@@ -17,6 +17,7 @@ export default function AddPostCard(props: any) {
     const [files, setFiles] = useState<File[]>([]);
     const [errorPopup, seterrorPopup] = useState<string | null>(null)
     const [btnPostLoading, setbtnPostLoading] = useState(false)
+    const errorToastRef = useRef<Id | null>(null)
 
     const { UserData, UserToken, UserPosts } = useSelector((state: StateFaces) => state.UserReducer)
     const dispath = useDispatch()
@@ -74,7 +75,13 @@ export default function AddPostCard(props: any) {
     };
 
     function showBodyError() {
-        Formik.errors.body && toast.error(Formik.errors.body)
+        if (errorToastRef.current) {
+            toast.dismiss(errorToastRef.current)
+            errorToastRef.current = null
+        }
+        if (Formik.errors.body) {
+            errorToastRef.current = toast.error(Formik.errors.body)
+        }
     }
 
 

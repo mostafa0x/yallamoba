@@ -22,8 +22,7 @@ export default function SignUp() {
     const [PageAnime, setPageAnime] = useState(false)
     const [BtnSignUp, setBtnSignUp] = useState(false)
     const [resError, setresError] = useState(null)
-    const errorToastRef = useRef<Id | null>(null);
-
+    const ToastPromis = useRef<Id | null | Promise<void>>(null)
     const Router = useRouter()
     const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
     const { avatars, currentAvatarIndex, AvatarAnmition } = useSelector((state: StateFaces) => state.AvatarReducer)
@@ -48,30 +47,36 @@ export default function SignUp() {
 
     async function handleSignUp(formValues: FormState) {
         if (!BtnSignUp) {
-            if (errorToastRef.current) {
-                toast.dismiss(errorToastRef.current);
-                errorToastRef.current = null
-            }
-            const WaitingToast = toast.loading("Waiting...")
-            setresError(null)
-            setBtnSignUp(true)
-            try {
-                const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/register`, formValues)
-                Dispath(Logging({ UserToken: data.data.UserToken, UserData: data.data.UserData }))
-                toast.success("Registration completed successfully")
+            setresError(null);
+            setBtnSignUp(true);
 
-            } catch (err: any) {
-                setBtnSignUp(false)
-                setresError(err.response.data.error)
-                errorToastRef.current = toast.error(err.response.data.error)
-                throw new Error(err.response.data.error)
-
-            } finally {
-                toast.dismiss(WaitingToast)
-            }
-
+            toast.promise(
+                axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/register`, formValues),
+                {
+                    pending: 'Registering...',
+                    success: 'Registration successful',
+                    error: {
+                        render({ data }: any) {
+                            return data?.response?.data?.error || "Registration failed";
+                        }
+                    }
+                }
+            )
+                .then((res: AxiosResponse) => {
+                    Dispath(Logging({
+                        UserToken: res.data.UserToken,
+                        UserData: res.data.UserData
+                    }));
+                })
+                .catch((err: any) => {
+                    setresError(err?.response?.data?.error || "Registration failed");
+                })
+                .finally(() => {
+                    setBtnSignUp(false);
+                });
         }
     }
+
 
     const Formik = useFormik({
         initialValues: {

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik"
 import * as yup from "yup"
 import { FormState } from "../../../InterFaces/FormState";
@@ -22,7 +22,6 @@ export default function Login() {
     const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
     const Dispath = useDispatch()
     const [resError, setresError] = useState(null)
-    const errorToastRef = useRef<Id | null>(null);
 
 
     const validationSchema = yup.object().shape({
@@ -38,40 +37,26 @@ export default function Login() {
 
     const handleLogin = async (formValues: FormState) => {
         if (!BtnLogin) {
-            if (errorToastRef.current) {
-                toast.dismiss(errorToastRef.current);
-                errorToastRef.current = null
-            }
-            const waitingToast = toast.loading("Waiting...");
             setresError(null);
             setBtnLogin(true);
+            toast.promise(
+                axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues),
+                {
+                    pending: 'Logging in...',
+                    success: 'Login successful',
+                    error: {
+                        render({ data }: any) {
 
-            try {
-                const response: AxiosResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues);
-                console.log(response.data);
-
-                Dispath(Logging({
-                    UserToken: response.data.UserToken,
-                    UserData: response.data.UserData
-                }));
-
-                toast.success("Login successfully");
-            } catch (err: any) {
+                            return data?.response?.data?.error || "Login failed";
+                        },
+                    }
+                }
+            ).then(response => {
+                Dispath(Logging({ UserToken: response.data.UserToken, UserData: response.data.UserData }));
                 setBtnLogin(false);
 
-                if (err.message === "Network Error") {
-                    setresError(err.message);
-                    toast.error(err.message);
-                    throw new Error(err.message);
-                } else {
-                    const errorMsg = err.response?.data?.error || "Login failed";
-                    setresError(errorMsg);
-                    errorToastRef.current = toast.error(errorMsg);
-                    throw new Error(errorMsg);
-                }
-            } finally {
-                toast.dismiss(waitingToast);
-            }
+            }).catch((err => setBtnLogin(false)))
+
         }
     };
 
