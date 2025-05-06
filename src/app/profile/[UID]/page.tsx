@@ -155,8 +155,7 @@ export default function Profile() {
                 {loadingPost ?
                     <div className="flex items-center justify-center mt-20 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
                         <div className="px-3 py-1 text-lg font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">loading...</div>
-                        <Image src={"/kaguraGif.gif"} width={100} height={100} alt="Loading" />
-                        {/* <img className='w-32' src="https://media0.giphy.com/media/dohh5f1ZT1iw5gkwji/giphy.gif?cid=6c09b952myqsk2h2jjxfl22zbemerc7fxpzn82z2txnb15nv&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=s" alt="loading  icon" /> */}
+                        <Image src={"/kaguraGif.gif"} unoptimized width={100} height={100} alt="Loading" />
                     </div>
                     : <div className='mt-12'>
                         {myProfile ? UserPosts?.map((post: any, index: number) => {

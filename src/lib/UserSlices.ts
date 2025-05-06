@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { StateUserSlices } from "../../InterFaces/StateUserSlices";
 import { toast } from "react-toastify";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 const initialState: StateUserSlices = {
   UserToken: null,
@@ -73,7 +74,11 @@ const UserSlices = createSlice({
       // state.UserLoading = true;
       toast.dismiss(WaitingLogOut);
       toast.dismiss();
-      toast.success("You have successfully logged out");
+      state.UserLoading = false;
+      action.payload && toast.success("You have successfully logged out");
+      !action.payload && toast.error("Error in something ! , login ");
+
+      // action.payload && action.payload.push("/signin");
     },
   },
 });

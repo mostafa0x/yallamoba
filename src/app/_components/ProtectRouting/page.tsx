@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { MouseEvent, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFaces } from '../../../../InterFaces/StateFaces'
 import { usePathname, useRouter } from 'next/navigation'
-import { ChangeUserToken, ChangeUserData, ChangeUserLoading } from '@/lib/UserSlices'
+import { ChangeUserToken, ChangeUserData, ChangeUserLoading, logOut } from '@/lib/UserSlices'
 import SpinnerLoader from '../SpinnerLoader/page'
 import { toast } from 'react-toastify'
 
@@ -37,27 +37,51 @@ export default function ProtectRouting({ children }: any) {
     //     }
     // }, []);
 
+    useEffect(() => {
+        function FakeData(e: KeyboardEvent) {
+            if (e.key == "e") {
+                localStorage.setItem("UserData", "null")
+                localStorage.setItem("UserToken", "null")
+            }
+        }
+        addEventListener("keydown", FakeData)
 
+        return () => {
+            removeEventListener("keydown", FakeData)
+        }
+    }, [])
     useEffect(() => {
         const localToken = localStorage.getItem("UserToken");
         const localData = localStorage.getItem("UserData");
 
         if (localToken) {
+
             dispatch(ChangeUserLoading(true));
             dispatch(ChangeUserToken(localToken));
 
             if (localData) {
+                if (localData == "null") {
+                    dispatch(logOut(null))
+
+                    return
+                }
                 try {
                     const userDataJSON = JSON.parse(localData);
                     dispatch(ChangeUserData(userDataJSON));
+
+
                 } catch (error) {
+                    toast.error("Something error , login ")
                     console.error("Failed to parse user data:", error);
+                    dispatch(logOut(Router))
                 }
             }
 
             dispatch(ChangeUserLoading(false));
         }
         if (!localToken) {
+            localStorage.removeItem("UserToken")
+            localStorage.removeItem("UserData")
             dispatch(ChangeUserLoading(false));
 
         }
