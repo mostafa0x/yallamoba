@@ -1,44 +1,36 @@
 "use client";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useFormik } from "formik"
-import * as yup from "yup"
 import { FormState } from "../../../InterFaces/FormState";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from 'react-redux';
 import { StateFaces } from '../../../InterFaces/StateFaces';
 import SpinnerLoader from '../_components/SpinnerLoader/page';
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { ChangeUserToken, Logging } from "@/lib/UserSlices";
-import dotenv from "dotenv"
-import { Id, toast } from "react-toastify";
+import axios from "axios";
+import { Logging } from "@/lib/UserSlices";
+import { toast } from "react-toastify";
 import LoadingPopup from "../_components/LoadingPopup/page";
-dotenv.config()
+import { validationSchema } from "../../lib/validationSchemas/signinSchema"
+import useSigninUI from "../Hooks/useSigninUI";
 
 export default function Login() {
     const Router = useRouter()
-    const [PageAnmie, setPageAnmie] = useState(false)
-    const [BtnLogin, setBtnLogin] = useState(false)
     const { UserToken } = useSelector((state: StateFaces) => state.UserReducer)
     const Dispath = useDispatch()
-    const [resError, setresError] = useState(null)
+    const {
+        isAnimating,
+        isSubmitting,
+        errorMessage,
+        handleSetSubmit,
+        handleSetAnimating,
+        seterrorMessage,
 
-
-    const validationSchema = yup.object().shape({
-        identifier: yup.string().required("Required !"),
-        password: yup.string().min(8, "To Short").required("Required !")
-    })
-
-    const handleGoToSignUp = () => {
-        setPageAnmie(true)
-        Router.push("/signup")
-
-    }
+    } = useSigninUI()
 
     const handleLogin = async (formValues: FormState) => {
-        if (!BtnLogin) {
-            setresError(null);
-            setBtnLogin(true);
+        if (!isSubmitting) {
+            seterrorMessage(null);
+            handleSetSubmit(1);
             toast.promise(
                 axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, formValues),
                 {
@@ -46,16 +38,22 @@ export default function Login() {
                     success: 'Login successful',
                     error: {
                         render({ data }: any) {
-
                             return data?.response?.data?.error || "Login failed";
                         },
                     }
                 }
             ).then(response => {
                 Dispath(Logging({ UserToken: response.data.UserToken, UserData: response.data.UserData }));
-                setBtnLogin(false);
+                handleSetSubmit(-1);
 
-            }).catch((err => setBtnLogin(false)))
+            }).catch((err => {
+                if (err?.response?.data?.error) {
+                    seterrorMessage(err.response.data.error)
+                } else {
+                    seterrorMessage(err.message)
+                }
+                handleSetSubmit(-1);
+            }))
 
         }
     };
@@ -67,28 +65,17 @@ export default function Login() {
         }, validationSchema, onSubmit: handleLogin
     })
 
-    useEffect(() => {
-        window.scroll(0, 0)
-
-        return () => {
-            setPageAnmie(false)
-            setBtnLogin(false)
-        }
-    }, [])
-
     if (UserToken) {
         return <SpinnerLoader />
     }
-
     return (
         <div>
-            {BtnLogin ? <LoadingPopup LoadingMessage="Logging in" wigthCard={330} />
+            {isSubmitting ? <LoadingPopup LoadingMessage="Logging in" wigthCard={330} />
                 : null}
-            <div className={`min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4  ${PageAnmie ? "animate-jump-out animate-once" : "animate-fade-up animate-once"}`}>
+            <div className={`min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4  ${isAnimating ? "animate-jump-out animate-once" : "animate-fade-up animate-once"}`}>
 
                 <div className="bg-white shadow-md rounded-md p-6 w-full max-w-sm">
                     <h1 className="text-3xl font-bold text-blue-600 text-center mb-6">Yalla Moba</h1>
-
                     <form onSubmit={Formik.handleSubmit} className="flex flex-col space-y-4">
                         <input
                             type="text"
@@ -118,16 +105,16 @@ export default function Login() {
 
                         <button
                             type="submit"
-                            className={`bg-blue-600 text-white rounded-md mb-4 py-2 font-bold ${BtnLogin ? "cursor-wait" : "cursor-pointer"} hover:bg-blue-700`}
+                            className={`bg-blue-600 text-white rounded-md mb-4 py-2 font-bold ${isSubmitting ? "cursor-wait" : "cursor-pointer"} hover:bg-blue-700`}
                         >
-                            {BtnLogin ? <>
+                            {isSubmitting ? <>
                                 <i className="fa-duotone fa-solid fa-spinner fa-bounce"></i>
                                 Loading...
                             </>
                                 : "Login"}
                         </button>
-                        {resError ? <div className="flex justify-center text-center animate-shake animate-once">
-                            <h1 className=" text-error text-lg">{resError}</h1>
+                        {errorMessage ? <div className="flex justify-center text-center animate-shake animate-once">
+                            <h1 className=" text-error text-lg">{errorMessage}</h1>
                         </div> : null}
                     </form>
 
@@ -136,26 +123,20 @@ export default function Login() {
                             forget password?
                         </a>
                     </div> */}
-
                     <hr className="my-4" />
-
                     <div className="flex justify-center">
-                        {/* <Link href={"/signup"}><button className="bg-green-600 text-white px-4 py-2 rounded-md font-bold cursor-pointer hover:bg-green-700">
-               Create Account
-           </button></Link> */}
-                        <button onClick={() => handleGoToSignUp()} className="bg-green-600 text-white px-4 py-2 rounded-md font-bold cursor-pointer hover:bg-green-700">
+                        <button onClick={() => {
+                            handleSetAnimating(1)
+                            Router.push("/signup")
+                        }} className="bg-green-600 text-white px-4 py-2 rounded-md font-bold cursor-pointer hover:bg-green-700">
                             Create Account
                         </button>
                     </div>
                 </div>
-
                 <p className="mt-6 text-sm text-gray-600 text-center">
                     yalla moba
                 </p>
-
-
             </div>
-        </div>
-
+        </div >
     );
 }
