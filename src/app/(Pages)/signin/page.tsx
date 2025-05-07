@@ -1,23 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik"
-import { FormState } from "../../../InterFaces/FormState";
+import { FormState } from "../../../../InterFaces/FormState";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from 'react-redux';
-import { StateFaces } from '../../../InterFaces/StateFaces';
-import SpinnerLoader from '../_components/SpinnerLoader/page';
+import { StateFaces } from '../../../../InterFaces/StateFaces';
+import SpinnerLoader from '../../_components/SpinnerLoader/page';
 import axios from "axios";
 import { Logging } from "@/lib/UserSlices";
 import { toast } from "react-toastify";
-import { validationSchema } from "../../lib/validationSchemas/signinSchema"
-import useSigninUI from "../Hooks/useSigninUI";
-import InputFiled from "../_components/Form/InputFiled";
-import ButtonSign from "../_components/Form/ButtonSign";
+import { validationSchema } from "../../../lib/validationSchemas/signinSchema"
+import useSigninUI from "../../Hooks/useSigninUI";
+import InputFiled from "../../_components/Form/InputFiled";
+import ButtonSign from "../../_components/Form/ButtonSign";
 import dynamic from "next/dynamic";
 import { BeatLoader } from "react-spinners";
-import BeatLoaderSpinner from "../_components/Spinners/BeatLoader";
+import BeatLoaderSpinner from "../../_components/Spinners/BeatLoader";
 
-const LoadingPopup = dynamic(() => import("../_components/LoadingPopup/page"), {
+const LoadingPopup = dynamic(() => import("../../_components/LoadingPopup/page"), {
     loading: () => <BeatLoaderSpinner />
 });
 

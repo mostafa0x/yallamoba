@@ -6,21 +6,21 @@ import { useDispatch, useSelector } from "react-redux";
 import axios, { AxiosResponse } from "axios";
 import { Id, toast } from "react-toastify";
 import { signupSchema } from "@/lib/validationSchemas/signupSchema";
-import useSignUpUI from "../Hooks/useSignUpUI";
+import useSignUpUI from "../../Hooks/useSignUpUI";
 import { Logging } from "@/lib/UserSlices";
 import { setAvatarAnmition } from "@/lib/AvatarSlices";
-import SpinnerLoader from "../_components/SpinnerLoader/page";
-import { StateFaces } from "../../../InterFaces/StateFaces";
-import { FormState } from "../../../InterFaces/FormState";
-import InputFiled from "../_components/Form/InputFiled";
-import InputGender from "../_components/Form/InputGender";
-import ButtonSign from "../_components/Form/ButtonSign";
+import SpinnerLoader from "../../_components/SpinnerLoader/page";
+import { StateFaces } from "../../../../InterFaces/StateFaces";
+import { FormState } from "../../../../InterFaces/FormState";
+import InputFiled from "../../_components/Form/InputFiled";
+import InputGender from "../../_components/Form/InputGender";
+import ButtonSign from "../../_components/Form/ButtonSign";
 import dynamic from "next/dynamic";
-import BeatLoaderSpinner from "../_components/Spinners/BeatLoader";
+import BeatLoaderSpinner from "../../_components/Spinners/BeatLoader";
 
-const RoleSelector = dynamic(() => import("../_components/RoleSelector/page"), { loading: () => <BeatLoaderSpinner /> });
-const AvatarIcons = dynamic(() => import("../_components/AvatarIcons/page"), { loading: () => <BeatLoaderSpinner /> });
-const LoadingPopup = dynamic(() => import("../_components/LoadingPopup/page"), { loading: () => <BeatLoaderSpinner /> });
+const RoleSelector = dynamic(() => import("../../_components/RoleSelector/page"), { loading: () => <BeatLoaderSpinner /> });
+const AvatarIcons = dynamic(() => import("../../_components/AvatarIcons/page"), { loading: () => <BeatLoaderSpinner /> });
+const LoadingPopup = dynamic(() => import("../../_components/LoadingPopup/page"), { loading: () => <BeatLoaderSpinner /> });
 
 
 
