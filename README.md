@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎮 YallaMoba - Social Hub for Mobile Legends Players
 
-## Getting Started
+![Mobile Legends](https://img.shields.io/badge/Mobile%20Legends-Social%20Platform-blueviolet?style=for-the-badge&logo=google-play)
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38BDF8?style=for-the-badge&logo=tailwind-css)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
+![Redux](https://img.shields.io/badge/Redux-Toolkit-purple?style=for-the-badge&logo=redux)
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)
+![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+![Open for Contributions](https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=for-the-badge&logo=github)
 
-First, run the development server:
+> 🚀 Create an account, share gameplay, follow others, and become a legend in the **Mobile Legends** community.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Features
+
+- 🔐 **User Authentication** – Sign up & log in securely
+- 📝 **Create Posts** – Share thoughts, game tips or updates
+- 🎥 **Upload Video Highlights** – Let others see your epic moments
+- 🌍 **Player Discovery** – Find and connect with other gamers
+- 📱 **Responsive UI** – Mobile-friendly & fast
+
+---
+
+## 💻 Tech Stack
+
+| 🧩 Technology       | 🔧 Purpose                            |
+|---------------------|----------------------------------------|
+| `Next.js 15`        | React framework (App Router)           |
+| `React 19`          | UI Components                          |
+| `Redux Toolkit`     | Global state management                |
+| `TailwindCSS 4`     | Utility-first styling                  |
+| `Formik + Yup`      | Forms and validation                   |
+| `React Toastify`    | Notifications                          |
+| `React Query`       | Data fetching                          |
+| `Day.js`            | Date and time formatting               |
+| `Slick Carousel`    | Carousels and media sliders            |
+
+---
+
+## 📁 Project Structure
+
+```
+.
+├── pages/           # App routing & page components
+├── _components/     # Form UI, Avatars, Role Selectors ,Reusable components
+├── hooks/           # Custom logic hooks
+├── lib/             # Redux slices, API configs , validationSchemas
+├── interfaces/      # TypeScript types
+├── public/          # Static files
+└── styles/          # Global CSS and Tailwind config
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command         | Description             |
+|----------------|--------------------------|
+| `npm run dev`  | Start development server |
+| `npm run build`| Build for production     |
+| `npm run start`| Launch production server |
+| `npm run lint` | Run code linter          |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🔐 Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a `.env.local` file with the following key:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```env
+NEXT_PUBLIC_BASE_URL=https://your-api-url.com/api
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 Getting Started
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Clone the repository
+git clone https://github.com/your-username/yallamoba.git
+
+# Enter the project directory
+cd yallamoba
+
+# Install dependencies
+npm install
+
+# Run the dev server
+npm run dev
+```
+
+---
+
+## 🖼️ Screenshots
+
+Coming soon! ( Esports, Squads ,Feed, Profile, Post Details...)
+
+---
+
+## 🤝 Contributing
+
+Open to contributions from all gamers & developers.
+Create issues, suggest features, or make a PR.
+Together we can make this the #1 hub for Mobile Legends.
+
+---
+
+
+🏆 Built by Gamers for Gamers — Let's connect, play, and grow together! ✨
