@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import LoadingPopup from "../_components/LoadingPopup/page";
 import { validationSchema } from "../../lib/validationSchemas/signinSchema"
 import useSigninUI from "../Hooks/useSigninUI";
+import { InputEmail } from "../_components/Form/InputEmail";
+import InputFiled from "../_components/Form/InputFiled";
 
 export default function Login() {
     const Router = useRouter()
@@ -77,32 +79,8 @@ export default function Login() {
                 <div className="bg-white shadow-md rounded-md p-6 w-full max-w-sm">
                     <h1 className="text-3xl font-bold text-blue-600 text-center mb-6">Yalla Moba</h1>
                     <form onSubmit={Formik.handleSubmit} className="flex flex-col space-y-4">
-                        <input
-                            type="text"
-                            placeholder="email"
-                            name="identifier"
-                            value={Formik.values.identifier}
-                            onChange={Formik.handleChange}
-                            onBlur={Formik.handleBlur}
-                            className="border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                            autoComplete="email"
-                        />
-                        {Formik.errors.identifier && Formik.touched.identifier ? <label className="text-red-600 opacity-70 animate-shake animate-once">{Formik.errors.identifier}</label> : null}
-                        <input
-                            type="password"
-                            placeholder="password"
-                            name="password"
-                            value={Formik.values.password}
-                            onChange={Formik.handleChange}
-                            onBlur={Formik.handleBlur}
-                            className="border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                            autoComplete="current-password"
-                        />
-                        {Formik.errors.password && Formik.touched.password ? <label className="text-red-600 opacity-70 animate-shake animate-once">{Formik.errors.password}</label> : null}
-
-
+                        <InputFiled type="text" placeholder="email or username" name="identifier" Formik={Formik} autoComplete="email" classType="signin" />
+                        <InputFiled type="password" placeholder="password" name="password" Formik={Formik} autoComplete="current-password" classType="signin" />
                         <button
                             type="submit"
                             className={`bg-blue-600 text-white rounded-md mb-4 py-2 font-bold ${isSubmitting ? "cursor-wait" : "cursor-pointer"} hover:bg-blue-700`}

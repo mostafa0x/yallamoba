@@ -1,0 +1,7 @@
+import React from "react";
+
+    function InputEmail({}) {
+      return (<input type="text" placeholder="email" name="identifier" value={Formik.values.identifier} onChange={Formik.handleChange} onBlur={Formik.handleBlur} className="border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required autoComplete="email" />);
+    }
+  
+  

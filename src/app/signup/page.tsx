@@ -1,7 +1,6 @@
 "use client";
-
 import React, { useEffect, useRef } from "react";
-import { useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import axios, { AxiosResponse } from "axios";
@@ -16,6 +15,8 @@ import AvatarIcons from "../_components/AvatarIcons/page";
 import LoadingPopup from "../_components/LoadingPopup/page";
 import { StateFaces } from "../../../InterFaces/StateFaces";
 import { FormState } from "../../../InterFaces/FormState";
+import InputFiled from "../_components/Form/InputFiled";
+import InputGender from "../_components/Form/InputGender";
 
 export default function SignUp() {
     const {
@@ -119,109 +120,12 @@ export default function SignUp() {
                     <h2 className="text-blue-600 text-2xl font-bold mb-6 text-center">
                         Create a new account
                     </h2>
-
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="Username in game"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.username}
-                        className="w-full px-3 py-2 border rounded"
-                        autoComplete="username"
-                        required
-                    />
-                    {formik.touched.username && formik.errors.username && (
-                        <p className="text-red-500 text-sm animate-shake">
-                            {formik.errors.username}
-                        </p>
-                    )}
-
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.email}
-                        className="w-full px-3 py-2 border rounded mt-4"
-                        autoComplete="email"
-                        required
-                    />
-                    {formik.touched.email && formik.errors.email && (
-                        <p className="text-red-500 text-sm animate-shake">
-                            {formik.errors.email}
-                        </p>
-                    )}
-
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="New password"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.password}
-                        className="w-full px-3 py-2 border rounded mt-4"
-                        autoComplete="new-password"
-                        required
-                    />
-                    {formik.touched.password && formik.errors.password && (
-                        <p className="text-red-500 text-sm animate-shake">
-                            {formik.errors.password}
-                        </p>
-                    )}
-
-                    <input
-                        type="password"
-                        name="repassword"
-                        placeholder="Confirm password"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.repassword}
-                        className="w-full px-3 py-2 border rounded mt-4"
-                        autoComplete="new-password"
-                        required
-                    />
-                    {formik.touched.repassword && formik.errors.repassword && (
-                        <p className="text-red-500 text-sm animate-shake">
-                            {formik.errors.repassword}
-                        </p>
-                    )}
-
-                    <label className="block text-sm mt-4 mb-1">Gender</label>
-                    <div className="flex gap-4">
-                        <label className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                name="gender"
-                                checked={formik.values.gender === "Male"}
-                                onChange={() => formik.setFieldValue("gender", "Male")}
-                            />
-                            Male
-                        </label>
-                        <label className="flex items-center gap-2">
-                            <input
-                                type="radio"
-                                name="gender"
-                                checked={formik.values.gender === "Female"}
-                                onChange={() => formik.setFieldValue("gender", "Female")}
-                            />
-                            Female
-                        </label>
-                    </div>
-                    {formik.touched.gender && formik.errors.gender && (
-                        <p className="text-red-500 text-sm animate-shake">
-                            {formik.errors.gender}
-                        </p>
-                    )}
-
+                    <InputFiled type="text" placeholder="username" name="username" Formik={formik} autoComplete="username" classType="signup" />
+                    <InputFiled type="email" placeholder="email" name="email" Formik={formik} autoComplete="email" classType="signup" />
+                    <InputFiled type="password" placeholder="password" name="password" Formik={formik} autoComplete="new-password" classType="signup" />
+                    <InputFiled type="password" placeholder="Confirm password" name="repassword" Formik={formik} autoComplete="new-password" classType="signup" />
+                    <InputGender Formik={formik} />
                     <RoleSelector Formik={formik} />
-                    {formik.touched.role && formik.errors.role && (
-                        <p className="text-red-500 text-sm animate-shake">
-                            {formik.errors.role}
-                        </p>
-                    )}
-
                     <AvatarIcons Formik={formik} />
 
                     <button

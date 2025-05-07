@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react'
 
-export default function RoleSelector(props: any) {
+export default function RoleSelector({ Formik }: any) {
 
     return (
         <div>
-            <label className="block text-sm mb-1">Your main role</label>
+            <label className="block text-sm mb-1 ">Your main role</label>
             <select
                 name="role"
-                onChange={props.Formik.handleChange}
-                onBlur={props.Formik.handleBlur}
-                value={props.Formik.values.role}
-                className="w-full px-3 py-2  border rounded"
+                onChange={Formik.handleChange}
+                onBlur={Formik.handleBlur}
+                value={Formik.values.role}
+                className={`w-full px-3 py-2  border rounded ${Formik.touched.role && Formik.errors.role ? "border-red-500" : "border-gray-300"}`}
                 required
             >
                 <option value="">Select your role</option>
@@ -20,6 +20,11 @@ export default function RoleSelector(props: any) {
                 <option value="MM">MM</option>
                 <option value="Exp">Exp</option>
             </select>
+            {Formik.touched.role && Formik.errors.role && (
+                <p className="text-red-500 text-sm animate-shake">
+                    {Formik.errors.role}
+                </p>
+            )}
         </div>
     )
 }
