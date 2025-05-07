@@ -12,8 +12,8 @@ import { toast } from "react-toastify";
 import LoadingPopup from "../_components/LoadingPopup/page";
 import { validationSchema } from "../../lib/validationSchemas/signinSchema"
 import useSigninUI from "../Hooks/useSigninUI";
-import { InputEmail } from "../_components/Form/InputEmail";
 import InputFiled from "../_components/Form/InputFiled";
+import ButtonSign from "../_components/Form/ButtonSign";
 
 export default function Login() {
     const Router = useRouter()
@@ -81,21 +81,8 @@ export default function Login() {
                     <form onSubmit={Formik.handleSubmit} className="flex flex-col space-y-4">
                         <InputFiled type="text" placeholder="email or username" name="identifier" Formik={Formik} autoComplete="email" classType="signin" />
                         <InputFiled type="password" placeholder="password" name="password" Formik={Formik} autoComplete="current-password" classType="signin" />
-                        <button
-                            type="submit"
-                            className={`bg-blue-600 text-white rounded-md mb-4 py-2 font-bold ${isSubmitting ? "cursor-wait" : "cursor-pointer"} hover:bg-blue-700`}
-                        >
-                            {isSubmitting ? <>
-                                <i className="fa-duotone fa-solid fa-spinner fa-bounce"></i>
-                                Loading...
-                            </>
-                                : "Login"}
-                        </button>
-                        {errorMessage ? <div className="flex justify-center text-center animate-shake animate-once">
-                            <h1 className=" text-error text-lg">{errorMessage}</h1>
-                        </div> : null}
+                        <ButtonSign isSubmitting={isSubmitting} buttonText="Login" classType="signin" errorMessage={errorMessage} />
                     </form>
-
                     {/* <div className="text-center mt-4">
                         <a href="#" className="text-blue-600 text-sm hover:underline">
                             forget password?

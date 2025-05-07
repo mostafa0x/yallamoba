@@ -17,6 +17,8 @@ import { StateFaces } from "../../../InterFaces/StateFaces";
 import { FormState } from "../../../InterFaces/FormState";
 import InputFiled from "../_components/Form/InputFiled";
 import InputGender from "../_components/Form/InputGender";
+import ButtonSign from "../_components/Form/ButtonSign";
+
 
 export default function SignUp() {
     const {
@@ -106,7 +108,6 @@ export default function SignUp() {
             {isSubmitting && (
                 <LoadingPopup LoadingMessage={"Registering now"} wigthCard={390} />
             )}
-
             <div
                 className={`min-h-screen flex items-center justify-center bg-gray-100 ${isAnimating
                     ? "animate-jump-out animate-once"
@@ -127,21 +128,7 @@ export default function SignUp() {
                     <InputGender Formik={formik} />
                     <RoleSelector Formik={formik} />
                     <AvatarIcons Formik={formik} />
-
-                    <button
-                        type="submit"
-                        className={`w-full bg-green-600 ${isSubmitting ? "cursor-wait" : "hover:bg-green-700"
-                            } text-white font-semibold py-2 mt-4 rounded`}
-                    >
-                        {isSubmitting ? "Loading..." : "Sign up"}
-                    </button>
-
-                    {errorMessage && (
-                        <div className="text-red-600 text-center mt-4 animate-shake">
-                            {errorMessage}
-                        </div>
-                    )}
-
+                    <ButtonSign isSubmitting={isSubmitting} buttonText="Sign up" classType="signup" errorMessage={errorMessage} />
                     <div className="mt-6 border-t-2 border-gray-300 pt-4 text-center">
                         <span className="text-sm">Already have an account?</span>
                         <button
