@@ -44,10 +44,9 @@
 ```
 .
 ├── pages/           # App routing & page components
-├── components/      # Reusable components
-├── _components/     # Form UI, Avatars, Role Selectors
+├── _components/     # Form UI, Avatars, Role Selectors ,Reusable components
 ├── hooks/           # Custom logic hooks
-├── lib/             # Redux slices, API configs
+├── lib/             # Redux slices, API configs , validationSchemas
 ├── interfaces/      # TypeScript types
 ├── public/          # Static files
 └── styles/          # Global CSS and Tailwind config
@@ -96,7 +95,7 @@ npm run dev
 
 ## 🖼️ Screenshots
 
-Coming soon! (Login, Feed, Profile, Post Details...)
+Coming soon! ( Esports, Squads ,Feed, Profile, Post Details...)
 
 ---
 
@@ -108,10 +107,5 @@ Together we can make this the #1 hub for Mobile Legends.
 
 ---
 
-## ⚖️ License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
 
 🏆 Built by Gamers for Gamers — Let's connect, play, and grow together! ✨
