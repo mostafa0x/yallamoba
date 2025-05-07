@@ -12,6 +12,7 @@ export default function InputFiled({ type, placeholder, name, Formik, autoComple
     return (
         <>
             <input
+                id={name}
                 type={type}
                 placeholder={placeholder}
                 name={name}
@@ -19,7 +20,7 @@ export default function InputFiled({ type, placeholder, name, Formik, autoComple
                 onChange={Formik?.handleChange}
                 onBlur={Formik?.handleBlur}
                 className={classType === "signin" ? `border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${Formik?.touched?.[name] && Formik?.errors?.[name] ? "border-red-500" : "border-gray-300"
-                    }` : `w-full px-3 py-2 border rounded mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500  ${Formik?.touched?.[name] && Formik?.errors?.[name] ? "border-red-500" : "border-gray-300"
+                    }` : `w-full px-3 pt-1 border rounded pb-2 mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500  ${Formik?.touched?.[name] && Formik?.errors?.[name] ? "border-red-500" : "border-gray-300"
                     } `}
 
                 required

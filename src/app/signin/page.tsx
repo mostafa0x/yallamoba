@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik"
 import { FormState } from "../../../InterFaces/FormState";
 import { useRouter } from "next/navigation";
@@ -9,11 +9,17 @@ import SpinnerLoader from '../_components/SpinnerLoader/page';
 import axios from "axios";
 import { Logging } from "@/lib/UserSlices";
 import { toast } from "react-toastify";
-import LoadingPopup from "../_components/LoadingPopup/page";
 import { validationSchema } from "../../lib/validationSchemas/signinSchema"
 import useSigninUI from "../Hooks/useSigninUI";
 import InputFiled from "../_components/Form/InputFiled";
 import ButtonSign from "../_components/Form/ButtonSign";
+import dynamic from "next/dynamic";
+import { BeatLoader } from "react-spinners";
+import BeatLoaderSpinner from "../_components/Spinners/BeatLoader";
+
+const LoadingPopup = dynamic(() => import("../_components/LoadingPopup/page"), {
+    loading: () => <BeatLoaderSpinner />
+});
 
 export default function Login() {
     const Router = useRouter()
@@ -66,6 +72,7 @@ export default function Login() {
             password: ""
         }, validationSchema, onSubmit: handleLogin
     })
+
 
     if (UserToken) {
         return <SpinnerLoader />

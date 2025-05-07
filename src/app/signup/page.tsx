@@ -10,14 +10,18 @@ import useSignUpUI from "../Hooks/useSignUpUI";
 import { Logging } from "@/lib/UserSlices";
 import { setAvatarAnmition } from "@/lib/AvatarSlices";
 import SpinnerLoader from "../_components/SpinnerLoader/page";
-import RoleSelector from "../_components/RoleSelector/page";
-import AvatarIcons from "../_components/AvatarIcons/page";
-import LoadingPopup from "../_components/LoadingPopup/page";
 import { StateFaces } from "../../../InterFaces/StateFaces";
 import { FormState } from "../../../InterFaces/FormState";
 import InputFiled from "../_components/Form/InputFiled";
 import InputGender from "../_components/Form/InputGender";
 import ButtonSign from "../_components/Form/ButtonSign";
+import dynamic from "next/dynamic";
+import BeatLoaderSpinner from "../_components/Spinners/BeatLoader";
+
+const RoleSelector = dynamic(() => import("../_components/RoleSelector/page"), { loading: () => <BeatLoaderSpinner /> });
+const AvatarIcons = dynamic(() => import("../_components/AvatarIcons/page"), { loading: () => <BeatLoaderSpinner /> });
+const LoadingPopup = dynamic(() => import("../_components/LoadingPopup/page"), { loading: () => <BeatLoaderSpinner /> });
+
 
 
 export default function SignUp() {
@@ -125,9 +129,15 @@ export default function SignUp() {
                     <InputFiled type="email" placeholder="email" name="email" Formik={formik} autoComplete="email" classType="signup" />
                     <InputFiled type="password" placeholder="password" name="password" Formik={formik} autoComplete="new-password" classType="signup" />
                     <InputFiled type="password" placeholder="Confirm password" name="repassword" Formik={formik} autoComplete="new-password" classType="signup" />
-                    <InputGender Formik={formik} />
-                    <RoleSelector Formik={formik} />
-                    <AvatarIcons Formik={formik} />
+                    <div className="mt-8">
+                        <InputGender Formik={formik} />
+                    </div>
+                    <div className="mt-8">
+                        <RoleSelector Formik={formik} />
+                    </div>
+                    <div className="mt-8">
+                        <AvatarIcons Formik={formik} />
+                    </div>
                     <ButtonSign isSubmitting={isSubmitting} buttonText="Sign up" classType="signup" errorMessage={errorMessage} />
                     <div className="mt-6 border-t-2 border-gray-300 pt-4 text-center">
                         <span className="text-sm">Already have an account?</span>
