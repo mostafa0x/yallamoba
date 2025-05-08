@@ -3,8 +3,8 @@ import RoleSelector from '../RoleSelector/page'
 import { useFormik } from 'formik'
 import AvatarIcons from '../AvatarIcons/page'
 
-export default function EditProfile(props: any) {
-    const { EditProfileFromChild } = props
+export default function EditProfile({ toggleProfileEdit }: any) {
+
 
     const handleEditProfile = async () => { }
 
@@ -27,7 +27,7 @@ export default function EditProfile(props: any) {
                 <p className='mb-7'></p>
                 <AvatarIcons Formik={Formik} />
                 <div className='flex justify-between gap-6'>
-                    <button onClick={() => EditProfileFromChild()} className='btn btn-warning hover:bg-base-600'>cancel</button>
+                    <button onClick={() => toggleProfileEdit(-1)} className='btn btn-warning hover:bg-base-600'>cancel</button>
                     <button className='btn btn-info hover:bg-base-600'>Update</button>
 
 

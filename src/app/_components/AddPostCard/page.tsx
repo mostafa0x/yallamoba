@@ -13,7 +13,7 @@ type formValues = {
     files: File | string
 }
 
-export default function AddPostCard(props: any) {
+export default function AddPostCard({ toggleAddPostModal }: any) {
     const [files, setFiles] = useState<File[]>([]);
     const [errorPopup, seterrorPopup] = useState<string | null>(null)
     const [btnPostLoading, setbtnPostLoading] = useState(false)
@@ -32,7 +32,7 @@ export default function AddPostCard(props: any) {
             const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`, fromdata, { headers })
             dispath(AddToUserPosts(data.data.newPost))
             toast.success("The post has been added successfully.")
-            props.SetFromChild()
+            toggleAddPostModal(-1)
         } catch (err: any) {
             console.log(err);
             toast.error("Error while adding post")
@@ -123,7 +123,11 @@ export default function AddPostCard(props: any) {
                     <div className="flex justify-between mt-6">
 
                         <button
-                            onClick={() => props.SetFromChild()}
+                            onClick={() => {
+                                toggleAddPostModal(-1)
+                                Formik.resetForm()
+                            }
+                            }
                             className="px-4 py-2 cursor-pointer bg-gray-300 rounded hover:bg-gray-400"
                         >
                             close
