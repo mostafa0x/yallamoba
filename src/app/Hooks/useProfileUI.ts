@@ -15,48 +15,46 @@ export default function useProfileUI() {
       : setIsAddPostModalVisible(false);
   };
   const toggleProfileEdit = (type: number) => {
-    type === 1 ? setIsEditProfileEnabled(true) : setIsEditProfileEnabled(false)
-  }
+    type === 1 ? setIsEditProfileEnabled(true) : setIsEditProfileEnabled(false);
+  };
   const toggleIsMyProfile = (type: number) => {
-    type === 1 ? setIsMyProfile(true) : setIsMyProfile(false)
-  }
+    type === 1 ? setIsMyProfile(true) : setIsMyProfile(false);
+  };
   const toggleIsPostLoading = (type: number) => {
-    type === 1 ? setIsPostLoading(true) : setIsPostLoading(false)
-  }
+    type === 1 ? setIsPostLoading(true) : setIsPostLoading(false);
+  };
   const toggleIsPageLoading = (type: number) => {
-    type === 1 ? setIsPageLoading(true) : setIsPageLoading(false)
-  }
+    type === 1 ? setIsPageLoading(true) : setIsPageLoading(false);
+    console.log("xx");
+  };
   useEffect(() => {
     if (isAddPostModalVisible) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     }
   }, [isAddPostModalVisible, setIsAddPostModalVisible]);
 
   useEffect(() => {
-
     return () => {
-      setIsPostLoading(true)
-      setIsPageLoading(true)
-      setIsEditProfileEnabled(false)
-      setIsMyProfile(false)
-      setIsAddPostModalVisible(false)
-    }
-  }, [])
-  return (
-    {
-      isAddPostModalVisible,
-      toggleAddPostModal,
-      isPostLoading,
-      toggleIsPostLoading,
-      isMyProfile,
-      toggleIsMyProfile,
-      isPageLoading,
-      toggleIsPageLoading,
-      isEditProfileEnabled,
-      toggleProfileEdit,
-      UID
-    }
-  )
+      setIsPostLoading(true);
+      setIsPageLoading(true);
+      setIsEditProfileEnabled(false);
+      setIsMyProfile(false);
+      setIsAddPostModalVisible(false);
+    };
+  }, []);
+  return {
+    isAddPostModalVisible,
+    toggleAddPostModal,
+    isPostLoading,
+    toggleIsPostLoading,
+    isMyProfile,
+    toggleIsMyProfile,
+    isPageLoading,
+    toggleIsPageLoading,
+    isEditProfileEnabled,
+    toggleProfileEdit,
+    UID,
+  };
 }

@@ -16,6 +16,7 @@ import FillUserState from '@/app/_Functions/FillUserState'
 import Image from 'next/image'
 import useProfileUI from '@/app/Hooks/useProfileUI'
 import { toast } from 'react-toastify'
+import useGetProfile from '@/app/Hooks/useGetProfile'
 
 
 
@@ -36,6 +37,7 @@ export default function Profile() {
         toggleProfileEdit,
         UID
     } = useProfileUI()
+    const { data, error, isError, isLoading } = useGetProfile()
 
 
     const roleIcons: StateRole = {
@@ -50,44 +52,53 @@ export default function Profile() {
 
 
 
-    async function GetProfile() {
-        try {
-            const data = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/${UID}`, { headers })
-            dispath(SetProfileData(data.data))
-            if (UserData?.UID === UID) {
-                dispath(ChangeUserPosts(data.data.ownerPosts))
-                FillUserState(data.data, dispath)
-            }
-            toggleIsPageLoading(-1)
+    // async function GetProfile() {
+    //     try {
+    //         const data = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/${UID}`, { headers })
+    //         dispath(SetProfileData(data.data))
+    //         if (UserData?.UID === UID) {
+    //             dispath(ChangeUserPosts(data.data.ownerPosts))
+    //             FillUserState(data.data, dispath)
+    //         }
+    //         toggleIsPageLoading(-1)
 
-        } catch (err: any) {
-            console.log(err);
+    //     } catch (err: any) {
+    //         console.log(err);
 
-            if (err.message === "Network Error") {
-                return toast.error("Network Error")
-            } else {
-                return toast.error(err.response.data.error)
-            }
-        } finally {
-            toggleIsPostLoading(-1)
-        }
-    }
+    //         if (err.message === "Network Error") {
+    //             return toast.error("Network Error")
+    //         } else {
+    //             return toast.error(err.response.data.error)
+    //         }
+    //     } finally {
+    //         toggleIsPostLoading(-1)
+    //     }
+    // }
 
+
+    // useEffect(() => {
+    //     if (UID === UserData?.UID) {
+    //         dispath(SetProfileData({ ownerData: UserData, ownerPosts: null }))
+    //         toggleIsMyProfile(1)
+    //         toggleIsPageLoading(-1)
+    //         // GetProfile()
+    //     } else {
+    //         toggleIsMyProfile(-1)
+    //         // GetProfile()
+    //     }
+    // }, [])
 
     useEffect(() => {
-        if (UID === UserData?.UID) {
-            dispath(SetProfileData({ ownerData: UserData, ownerPosts: null }))
-            toggleIsMyProfile(1)
-            toggleIsPageLoading(-1)
-            GetProfile()
-        } else {
-            toggleIsMyProfile(-1)
-            GetProfile()
+        if (data) {
+            console.log(data);
+
+            if (data?.data?.ownerData?.uid === UserData?.UID) {
+                toggleIsMyProfile(1)
+            }
+            toggleIsPageLoading(- 1)
+            toggleIsPostLoading(-1)
         }
-    }, [])
-
-
-
+    }, [data])
 
 
 
@@ -100,6 +111,9 @@ export default function Profile() {
     }
 
     if (isPageLoading) {
+        return <SpinnerLoader />
+    }
+    if (isLoading) {
         return <SpinnerLoader />
     }
 
