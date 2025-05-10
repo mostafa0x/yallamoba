@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StateFaces } from '../../../../InterFaces/StateFaces';
 import MainLogo from '../MainLogo/page';
 import { logOut } from '@/lib/UserSlices';
+import AvatarUser from '../AvatarUser/page';
 
 
 export default function NavBar() {
@@ -56,10 +57,8 @@ export default function NavBar() {
                     </div>
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                            <div className="w-10 rounded-full">
-                                <img
-                                    alt="User Avatar"
-                                    src={UserData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
+                            <div className="">
+                                <AvatarUser Avatar={UserData?.avatar} Size={{ Width: 10, higth: 10 }} />
                             </div>
                         </div>
                         <ul

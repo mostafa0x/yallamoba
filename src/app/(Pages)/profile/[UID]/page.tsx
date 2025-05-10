@@ -19,6 +19,7 @@ import useGetProfile from '@/app/Hooks/useGetProfile'
 import TypeHookGetProfile from '../../../../../InterFaces/TypeHookGetProfile'
 import ErrorPopup from '@/app/_components/ErrorPopup/page'
 import { ProfileContext } from '@/app/Contexts/ProfileContext'
+import AvatarUser from '@/app/_components/AvatarUser/page'
 
 
 
@@ -100,9 +101,11 @@ export default function Profile() {
                 <div className='flex justify-between border-b-2 pb-2 border-gray-400 items-center mb-12 '>
                     <div className='flex flex-row gap-8 items-center'>
                         <div className="">
-                            <img className='rounded-full w-35 h-28 object-fill '
+                            {/* <img className={`rounded-full w-35 h-28 object-fill `}
                                 alt="User Avatar"
                                 src={ProfileData?.ownerData.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"} />
+                       */}
+                            <AvatarUser Avatar={ProfileData.ownerData.avatar} Size={{ Width: 35, higth: 28 }} />
                         </div>
                         <div className='flex flex-col'>
                             <div className='flex flex-row'>

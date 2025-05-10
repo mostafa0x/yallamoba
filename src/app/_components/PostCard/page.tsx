@@ -12,6 +12,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { RemovePostFromUserPosts } from '@/lib/UserSlices';
 import { toast } from 'react-toastify';
 import { PostDataType } from '../../../../InterFaces/StateProfileSlices';
+import AvatarUser from '../AvatarUser/page';
 
 
 interface Props {
@@ -78,11 +79,7 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
-                    <img
-                        src={OwnerData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
-                        alt="Post Avatar"
-                        className="w-10 h-10 rounded-full"
-                    />
+                    <AvatarUser Avatar={OwnerData?.avatar} Size={{ Width: 10, higth: 10 }} />
                     <div>
                         <p className="font-semibold">{OwnerData?.username}</p>
                         <p className="text-sm text-gray-500">{TimePost}</p>
@@ -194,11 +191,7 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
 
             {/* Add Comment */}
             <div className="flex items-center gap-3 mt-3">
-                <img
-                    src={myData?.avatar ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVva9csN-zOiY2wG9CXNuAI1VRsFunaiD3nQ&s"}
-                    alt="User Avatar"
-                    className="w-9 h-9 rounded-full"
-                />
+                <AvatarUser Avatar={myData?.avatar} Size={{ Width: 9, higth: 9 }} />
                 <input
                     type="text"
                     className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm outline-none"
