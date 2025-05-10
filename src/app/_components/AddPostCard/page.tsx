@@ -7,6 +7,7 @@ import * as yup from "yup"
 import { Id, toast } from 'react-toastify';
 import ErrorPopup from '../ErrorPopup/page';
 import { AddToUserPosts } from '@/lib/UserSlices';
+import CashUserPosts from '@/app/_Functions/CashUserPosts';
 
 type formValues = {
     body: string,
@@ -32,6 +33,7 @@ export default function AddPostCard({ toggleAddPostModal }: any) {
             const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`, fromdata, { headers })
             dispath(AddToUserPosts(data.data.newPost))
             toast.success("The post has been added successfully.")
+            CashUserPosts(data.data.newPost)
             toggleAddPostModal(-1)
         } catch (err: any) {
             console.log(err);

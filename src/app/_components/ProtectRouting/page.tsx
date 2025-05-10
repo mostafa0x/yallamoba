@@ -2,7 +2,7 @@ import React, { MouseEvent, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFaces } from '../../../../InterFaces/StateFaces'
 import { useParams, usePathname, useRouter } from 'next/navigation'
-import { ChangeUserToken, ChangeUserData, ChangeUserLoading, logOut } from '@/lib/UserSlices'
+import { ChangeUserToken, ChangeUserData, ChangeUserLoading, logOut, ChangeCashPosts } from '@/lib/UserSlices'
 import SpinnerLoader from '../SpinnerLoader/page'
 import { toast } from 'react-toastify'
 
@@ -38,23 +38,39 @@ export default function ProtectRouting({ children }: any) {
     //     }
     // }, []);
 
-    useEffect(() => {
-        function FakeData(e: KeyboardEvent) {
-            if (e.key == "e") {
-                localStorage.setItem("UserData", "null")
-                localStorage.setItem("UserToken", "null")
-            }
-        }
-        addEventListener("keydown", FakeData)
+    // useEffect(() => {
+    //     function FakeData(e: KeyboardEvent) {
+    //         if (e.key == "e") {
+    //             localStorage.setItem("UserData", "null")
+    //             localStorage.setItem("UserToken", "null")
+    //         }
+    //     }
+    //     addEventListener("keydown", FakeData)
 
-        return () => {
-            removeEventListener("keydown", FakeData)
-        }
-    }, [])
+    //     return () => {
+    //         removeEventListener("keydown", FakeData)
+    //     }
+    // }, [])
     useEffect(() => {
         const localToken = localStorage.getItem("UserToken");
         const localData = localStorage.getItem("UserData");
+        const localPosts = localStorage.getItem("UserPosts");
+        console.log("m,m,");
 
+        if (localPosts) {
+            console.log("xx");
+            dispatch(ChangeCashPosts(JSON.parse(localPosts)))
+        } else {
+            console.log("xxhjhj");
+
+        }
+
+        if (localToken == "null") {
+            localStorage.removeItem("UserToken")
+            localStorage.removeItem("UserData")
+            localStorage.removeItem("UserPosts")
+            dispatch(logOut(null))
+        }
         if (localToken) {
 
             dispatch(ChangeUserLoading(true));
@@ -84,6 +100,8 @@ export default function ProtectRouting({ children }: any) {
         if (!localToken) {
             localStorage.removeItem("UserToken")
             localStorage.removeItem("UserData")
+            localStorage.removeItem("UserPosts")
+
             dispatch(ChangeUserLoading(false));
 
         }

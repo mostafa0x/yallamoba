@@ -18,6 +18,7 @@ const initialState: StateUserSlices = {
   },
   UserLoading: true,
   UserPosts: null,
+  CashPosts: null,
 };
 
 const UserSlices = createSlice({
@@ -47,6 +48,9 @@ const UserSlices = createSlice({
     ChangeUserPosts: (state, action) => {
       state.UserPosts = action.payload;
     },
+    ChangeCashPosts: (state, action) => {
+      state.CashPosts = action.payload;
+    },
     AddToUserPosts: (state, action) => {
       state.UserPosts?.unshift(action.payload);
     },
@@ -73,6 +77,8 @@ const UserSlices = createSlice({
       state.UserData = null;
       localStorage.removeItem("UserToken");
       localStorage.removeItem("UserData");
+      localStorage.removeItem("UserPosts");
+
       // state.UserLoading = true;
       toast.dismiss(WaitingLogOut);
       toast.dismiss();
@@ -92,6 +98,7 @@ export const {
   ChangeUserData,
   ChangeUserLoading,
   ChangeUserPosts,
+  ChangeCashPosts,
   AddToUserPosts,
   fillUserData,
   RemovePostFromUserPosts,

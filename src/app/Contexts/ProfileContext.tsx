@@ -1,7 +1,7 @@
 "use client"
 import React, { createContext, useState, Dispatch, SetStateAction, useEffect } from "react";
 
-type ProfileContextType = {
+interface ProfileContextType {
     isAddPostModalVisible: boolean;
     isPostLoading: boolean;
     isMyProfile: boolean;
@@ -32,7 +32,7 @@ export const ProfileContext = createContext<ProfileContextType>({
 
 
 export function ProfileContextProvider({ children }: any) {
-    const [isAddPostModalVisible, setIsAddPostModalVisible] = useState<boolean>(false);
+    const [isAddPostModalVisible, setIsAddPostModalVisible] = useState(false);
     const [isPostLoading, setIsPostLoading] = useState(true);
     const [isMyProfile, setIsMyProfile] = useState(false);
     const [isPageLoading, setIsPageLoading] = useState(true);

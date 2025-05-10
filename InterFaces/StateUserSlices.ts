@@ -17,6 +17,7 @@ export interface StateUserSlices {
   };
   UserLoading?: boolean;
   UserPosts?: null | PostDataType[];
+  CashPosts: null | PostDataType[];
 }
 
 export interface UserDataType {

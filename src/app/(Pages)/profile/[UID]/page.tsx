@@ -26,7 +26,7 @@ import AvatarUser from '@/app/_components/AvatarUser/page'
 export default function Profile() {
     const dispath = useDispatch()
     const { UID } = useParams()
-    const { UserToken, UserData, UserPosts, headers } = useSelector((state: StateFaces) => state.UserReducer)
+    const { UserToken, UserData, UserPosts, headers, CashPosts } = useSelector((state: StateFaces) => state.UserReducer)
     const { ProfileData } = useSelector((state: StateFaces) => state.ProfileReducer)
     const { data, error, isError, isLoading }: TypeHookGetProfile = useGetProfile()
     const {
@@ -54,9 +54,11 @@ export default function Profile() {
 
     useEffect(() => {
         if (UID === UserData?.UID) {
-            dispath(SetProfileData({ ownerData: UserData, ownerPosts: null }))
+            dispath(SetProfileData({ ownerData: UserData, ownerPosts: CashPosts }))
             toggleIsMyProfile(1)
             toggleIsPageLoading(-1)
+            CashPosts && toggleIsPostLoading(-1)
+
         }
         return () => {
             toggleIsMyProfile(-1)
