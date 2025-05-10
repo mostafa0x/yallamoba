@@ -7,11 +7,6 @@ type ProfileContextType = {
     isMyProfile: boolean;
     isPageLoading: boolean;
     isEditProfileEnabled: boolean;
-    setIsAddPostModalVisible?: Dispatch<SetStateAction<boolean>>;
-    setIsPostLoading?: Dispatch<SetStateAction<boolean>>;
-    setIsMyProfile?: Dispatch<SetStateAction<boolean>>;
-    setIsPageLoading?: Dispatch<SetStateAction<boolean>>;
-    setIsEditProfileEnabled?: Dispatch<SetStateAction<boolean>>;
     toggleProfileEdit: (type: number) => void;
     toggleAddPostModal: (type: number) => void;
     toggleIsMyProfile: (type: number) => void;

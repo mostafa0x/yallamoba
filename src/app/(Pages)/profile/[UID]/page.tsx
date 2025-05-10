@@ -27,19 +27,6 @@ export default function Profile() {
     const { UID } = useParams()
     const { UserToken, UserData, UserPosts, headers } = useSelector((state: StateFaces) => state.UserReducer)
     const { ProfileData } = useSelector((state: StateFaces) => state.ProfileReducer)
-    // const {
-    //     isAddPostModalVisible,
-    //     toggleAddPostModal,
-    //     isPostLoading,
-    //     toggleIsPostLoading,
-    //     isMyProfile,
-    //     toggleIsMyProfile,
-    //     isPageLoading,
-    //     toggleIsPageLoading,
-    //     isEditProfileEnabled,
-    //     toggleProfileEdit,
-    //     UID
-    // } = useProfileUI()
     const { data, error, isError, isLoading }: TypeHookGetProfile = useGetProfile()
     const {
         isAddPostModalVisible,
@@ -91,59 +78,6 @@ export default function Profile() {
 
     }, [data])
 
-
-    // async function GetProfile() {
-    //     try {
-    //         const data = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/${UID}`, { headers })
-    //         dispath(SetProfileData(data.data))
-    //         if (UserData?.UID === UID) {
-    //             dispath(ChangeUserPosts(data.data.ownerPosts))
-    //             FillUserState(data.data, dispath)
-    //         }
-    //         toggleIsPageLoading(-1)
-
-    //     } catch (err: any) {
-    //         console.log(err);
-
-    //         if (err.message === "Network Error") {
-    //             return toast.error("Network Error")
-    //         } else {
-    //             return toast.error(err.response.data.error)
-    //         }
-    //     } finally {
-    //         toggleIsPostLoading(-1)
-    //     }
-    // }
-
-
-    // useEffect(() => {
-    //     if (UID === UserData?.UID) {
-    //         dispath(SetProfileData({ ownerData: UserData, ownerPosts: null }))
-    //         toggleIsMyProfile(1)
-    //         toggleIsPageLoading(-1)
-    //         // GetProfile()
-    //     } else {
-    //         toggleIsMyProfile(-1)
-    //         // GetProfile()
-    //     }
-    // }, [])
-
-    // useEffect(() => {
-    //     if (UID == UserData?.UID) {
-    //         dispath(SetProfileData({ ownerData: UserData, ownerPosts: null }))
-    //         toggleIsMyProfile(1)
-    //         toggleIsPageLoading(-1)
-    //     }
-    // }, [])
-
-    // useEffect(() => {
-    //     if (data) {
-    //         const respone_UID = parseInt(data?.ownerData?.uid)
-    //         if (respone_UID == UserData?.UID) {
-    //             toggleIsPostLoading(-1)
-    //         }
-    //     }
-    // }, [data])
 
     if (!UserToken) {
         return <SpinnerLoader />
