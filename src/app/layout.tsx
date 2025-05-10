@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ReactQuery from "@/lib/ReactQuery/ReactQuery";
+import { ContextProvider } from "./Contexts/ContextProvider";
 
 
 export default function RootLayout({
@@ -23,23 +24,25 @@ export default function RootLayout({
       <Provider store={Store}>
         <body className="vsc-initialized">
           <ReactQuery>
-            <NavBar />
-            <ProtectRouting>
-              {children}
-            </ProtectRouting>
-            <ToastContainer position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              limit={5}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-              transition={Bounce}
-            />
+            <ContextProvider>
+              <NavBar />
+              <ProtectRouting>
+                {children}
+              </ProtectRouting>
+              <ToastContainer position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                limit={5}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Bounce}
+              />
+            </ContextProvider>
           </ReactQuery>
 
         </body>

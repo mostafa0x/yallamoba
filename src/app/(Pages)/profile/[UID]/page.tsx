@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PostCard from '../../../_components/PostCard/page'
 import { useDispatch, useSelector } from 'react-redux'
 import { StateFaces } from '../../../../../InterFaces/StateFaces'
@@ -14,16 +14,33 @@ import { SetProfileData } from '@/lib/ProfileSlices'
 import { ChangeUserPosts } from '@/lib/UserSlices'
 import FillUserState from '@/app/_Functions/FillUserState'
 import Image from 'next/image'
-import useProfileUI from '@/app/Hooks/useProfileUI'
 import { toast } from 'react-toastify'
 import useGetProfile from '@/app/Hooks/useGetProfile'
+import TypeHookGetProfile from '../../../../../InterFaces/TypeHookGetProfile'
+import ErrorPopup from '@/app/_components/ErrorPopup/page'
+import { ProfileContext } from '@/app/Contexts/ProfileContext'
 
 
 
 export default function Profile() {
     const dispath = useDispatch()
+    const { UID } = useParams()
     const { UserToken, UserData, UserPosts, headers } = useSelector((state: StateFaces) => state.UserReducer)
     const { ProfileData } = useSelector((state: StateFaces) => state.ProfileReducer)
+    // const {
+    //     isAddPostModalVisible,
+    //     toggleAddPostModal,
+    //     isPostLoading,
+    //     toggleIsPostLoading,
+    //     isMyProfile,
+    //     toggleIsMyProfile,
+    //     isPageLoading,
+    //     toggleIsPageLoading,
+    //     isEditProfileEnabled,
+    //     toggleProfileEdit,
+    //     UID
+    // } = useProfileUI()
+    const { data, error, isError, isLoading }: TypeHookGetProfile = useGetProfile()
     const {
         isAddPostModalVisible,
         toggleAddPostModal,
@@ -35,10 +52,7 @@ export default function Profile() {
         toggleIsPageLoading,
         isEditProfileEnabled,
         toggleProfileEdit,
-        UID
-    } = useProfileUI()
-    const { data, error, isError, isLoading } = useGetProfile()
-
+    } = useContext(ProfileContext)
 
     const roleIcons: StateRole = {
         Roam: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSEyr-9XP3T94ExZMEJ2J8hg14xy_EWv0hmjHl0F7BNWj77uX_P7W0X00msjDKG6UADPQ&usqp=CAU",
@@ -50,6 +64,32 @@ export default function Profile() {
 
     const popularity: string = "https://sin1.contabostorage.com/0a986eb902c4469cb860e43985eb18a1:vocapanel/sabishopgaming/10-5b75-original.png"
 
+    useEffect(() => {
+        if (UID === UserData?.UID) {
+            dispath(SetProfileData({ ownerData: UserData, ownerPosts: null }))
+            toggleIsMyProfile(1)
+            toggleIsPageLoading(-1)
+        }
+        return () => {
+            toggleIsMyProfile(-1)
+            toggleIsPageLoading(1)
+            toggleIsPostLoading(1)
+            toggleProfileEdit(-1)
+            toggleAddPostModal(-1)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (data) {
+            if (UID === UserData?.UID) {
+                dispath(SetProfileData({ ownerData: UserData, ownerPosts: null }))
+            }
+            toggleIsPostLoading(-1)
+            toggleIsPageLoading(-1)
+
+        }
+
+    }, [data])
 
 
     // async function GetProfile() {
@@ -88,19 +128,22 @@ export default function Profile() {
     //     }
     // }, [])
 
-    useEffect(() => {
-        if (data) {
-            console.log(data);
+    // useEffect(() => {
+    //     if (UID == UserData?.UID) {
+    //         dispath(SetProfileData({ ownerData: UserData, ownerPosts: null }))
+    //         toggleIsMyProfile(1)
+    //         toggleIsPageLoading(-1)
+    //     }
+    // }, [])
 
-            if (data?.data?.ownerData?.uid === UserData?.UID) {
-                toggleIsMyProfile(1)
-            }
-            toggleIsPageLoading(- 1)
-            toggleIsPostLoading(-1)
-        }
-    }, [data])
-
-
+    // useEffect(() => {
+    //     if (data) {
+    //         const respone_UID = parseInt(data?.ownerData?.uid)
+    //         if (respone_UID == UserData?.UID) {
+    //             toggleIsPostLoading(-1)
+    //         }
+    //     }
+    // }, [data])
 
     if (!UserToken) {
         return <SpinnerLoader />
@@ -113,12 +156,11 @@ export default function Profile() {
     if (isPageLoading) {
         return <SpinnerLoader />
     }
-    if (isLoading) {
-        return <SpinnerLoader />
-    }
+
 
     return (
         <>
+
             {isAddPostModalVisible && isMyProfile ? <AddPostCard toggleAddPostModal={toggleAddPostModal} /> : null}
             <div className='my-12 mx-40 animate-fade-up animate-once '>
                 <div className='flex justify-between border-b-2 pb-2 border-gray-400 items-center mb-12 '>

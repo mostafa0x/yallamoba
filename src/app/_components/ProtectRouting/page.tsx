@@ -116,6 +116,8 @@ export default function ProtectRouting({ children }: any) {
         return <SpinnerLoader />
     }
 
+
+
     return <div>
         {children}
     </div>

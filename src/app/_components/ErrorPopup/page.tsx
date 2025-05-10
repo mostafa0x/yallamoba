@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 
 
 interface props {
-    errorMes: string
-    CloseErrorPopup: any
+    errorMes: string | undefined
+    CloseErrorPopup?: () => void
 }
 
 export default function ErrorPopup({ errorMes, CloseErrorPopup }: props) {
@@ -22,7 +22,8 @@ export default function ErrorPopup({ errorMes, CloseErrorPopup }: props) {
             style={{ backgroundColor: 'rgba(55, 65, 81, 0.5)' }} >
             <div className="bg-white p-2 w-80 h-42 text-center rounded shadow-lg  max-w-md">
                 <h1 className='p-6 mb-4'>{errorMes}</h1>
-                <button onClick={() => CloseErrorPopup()} className='btn btn-info' >Cloes</button>
+                {CloseErrorPopup ? <button onClick={() => CloseErrorPopup()} className='btn btn-info' >Cloes</button>
+                    : null}
             </div>
         </div >
     )
