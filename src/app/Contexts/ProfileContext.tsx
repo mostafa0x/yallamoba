@@ -1,5 +1,6 @@
 "use client"
 import React, { createContext, useState, Dispatch, SetStateAction, useEffect } from "react";
+import { PostDataType } from "../../../InterFaces/StateProfileSlices";
 
 interface ProfileContextType {
     isAddPostModalVisible: boolean;
@@ -7,11 +8,13 @@ interface ProfileContextType {
     isMyProfile: boolean;
     isPageLoading: boolean;
     isEditProfileEnabled: boolean;
+    isViewPost: PostDataType | null
     toggleProfileEdit: (type: number) => void;
     toggleAddPostModal: (type: number) => void;
     toggleIsMyProfile: (type: number) => void;
     toggleIsPageLoading: (type: number) => void;
     toggleIsPostLoading: (type: number) => void;
+    toggleIsViewPost: (post: PostDataType | null) => void;
 
 };
 
@@ -21,12 +24,14 @@ export const ProfileContext = createContext<ProfileContextType>({
     isMyProfile: false,
     isPageLoading: true,
     isEditProfileEnabled: false,
+    isViewPost: null,
 
     toggleProfileEdit: (type: number) => { },
     toggleAddPostModal: (type: number) => { },
     toggleIsMyProfile: (type: number) => { },
     toggleIsPageLoading: (type: number) => { },
     toggleIsPostLoading: (type: number) => { },
+    toggleIsViewPost: (post: PostDataType | null) => { },
 
 });
 
@@ -37,9 +42,12 @@ export function ProfileContextProvider({ children }: any) {
     const [isMyProfile, setIsMyProfile] = useState(false);
     const [isPageLoading, setIsPageLoading] = useState(true);
     const [isEditProfileEnabled, setIsEditProfileEnabled] = useState(false);
+    const [isViewPost, setIsViewPost] = useState<PostDataType | null>(null);
 
 
-
+    const toggleIsViewPost = (post: PostDataType |null) => {
+        setIsViewPost(post)
+    };
     const toggleAddPostModal = (type: number) => {
         type === 1
             ? setIsAddPostModalVisible(true)
@@ -74,10 +82,12 @@ export function ProfileContextProvider({ children }: any) {
         isMyProfile,
         isPageLoading,
         isEditProfileEnabled,
+        isViewPost,
         toggleProfileEdit,
         toggleAddPostModal,
         toggleIsMyProfile,
         toggleIsPostLoading,
         toggleIsPageLoading,
+        toggleIsViewPost,
     }}>{children}</ProfileContext.Provider>
 }

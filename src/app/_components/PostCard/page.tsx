@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { UserDataType } from '../../../../InterFaces/StateUserSlices'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -13,6 +13,7 @@ import { RemovePostFromUserPosts } from '@/lib/UserSlices';
 import { toast } from 'react-toastify';
 import { PostDataType } from '../../../../InterFaces/StateProfileSlices';
 import AvatarUser from '../AvatarUser/page';
+import { ProfileContext } from '@/app/Contexts/ProfileContext';
 
 
 interface Props {
@@ -30,7 +31,7 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [btnDeletPost, setbtnDeletPost] = useState(false)
-
+    const { toggleIsViewPost } = useContext(ProfileContext)
     const dispath = useDispatch()
     async function DeletePost(postID: number) {
 
@@ -58,29 +59,14 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
         }).finally(() => {
             setbtnDeletPost(false)
         })
-        // try {
-        //     const data = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${postID}`, { headers })
-        //     console.log(data);
-        //     dispath(RemovePostFromUserPosts(postID))
-        //     const localCashPost = localStorage.getItem("UserPosts")
-        //     if (localCashPost) {
-        //         const ParseCashPost = JSON.parse(localCashPost)
-        //         const newCashPost = ParseCashPost.filter((post: PostDataType) => post.id !== postID)
-        //         localStorage.setItem("UserPosts", JSON.stringify(newCashPost))
-        //     }
 
-        // } catch (err) {
-        //     console.log(err);
 
-        // }
     }
     const handleDelete = async (postID: number) => {
         if (!btnDeletPost) {
-            // const WaitingDelete = toast.loading("Wait to delete post ..")
             setbtnDeletPost(true)
             try {
                 await DeletePost(postID);
-                // toast.success("Post deleted successfully")
                 setOpen(false);
             } catch (err) {
                 console.log(err);
@@ -133,8 +119,6 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
                                         Delete
                                     </>
                                     }
-
-
                                 </a>
                             </li>
                         </ul>
@@ -151,7 +135,7 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
 
             {/* Media (Image or Video) */}
             {Post?.files?.length > 0 && (
-                <div className="mb-4">
+                <div onClick={() => toggleIsViewPost(Post)} className="mb-4 cursor-pointer">
                     <Slider
                         dots={true}
                         infinite={false}
@@ -159,6 +143,8 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
                         slidesToShow={Post.files.length >= 2 ? 2 : Post.files.length}
                         slidesToScroll={2}
                         arrows={true}
+
+
                     >
                         {Post.files.map((fileUrl: string, index: number) => {
                             const extension = fileUrl.split('.').pop()?.toLowerCase();

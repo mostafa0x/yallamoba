@@ -20,6 +20,7 @@ import TypeHookGetProfile from '../../../../../InterFaces/TypeHookGetProfile'
 import ErrorPopup from '@/app/_components/ErrorPopup/page'
 import { ProfileContext } from '@/app/Contexts/ProfileContext'
 import AvatarUser from '@/app/_components/AvatarUser/page'
+import ViewPosts from '@/app/_components/ViewPosts/page'
 
 
 
@@ -40,6 +41,8 @@ export default function Profile() {
         toggleIsPageLoading,
         isEditProfileEnabled,
         toggleProfileEdit,
+        isViewPost,
+        toggleIsViewPost
     } = useContext(ProfileContext)
 
     const roleIcons: StateRole = {
@@ -98,7 +101,7 @@ export default function Profile() {
 
     return (
         <>
-
+            {isViewPost ? <ViewPosts post={isViewPost} toggleIsViewPost={toggleIsViewPost} /> : null}
             {isAddPostModalVisible && isMyProfile ? <AddPostCard toggleAddPostModal={toggleAddPostModal} /> : null}
             <div className='my-12 mx-40 animate-fade-up animate-once '>
                 <div className='flex justify-between border-b-2 pb-2 border-gray-400 items-center mb-12 '>
