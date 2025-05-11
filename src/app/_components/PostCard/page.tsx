@@ -34,36 +34,56 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
     const dispath = useDispatch()
     async function DeletePost(postID: number) {
 
-        try {
-            const data = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${postID}`, { headers })
-            console.log(data);
+        toast.promise(axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${postID}`, { headers }), {
+            pending: "Waiting to delete post ...",
+            success: "The post has been deleted successfully",
+            error: {
+                render({ data }: any) {
+                    return data?.response?.data?.error || "delete post failed";
+                },
+            },
+        }
+        ).then((data: any) => {
             dispath(RemovePostFromUserPosts(postID))
             const localCashPost = localStorage.getItem("UserPosts")
             if (localCashPost) {
                 const ParseCashPost = JSON.parse(localCashPost)
-                const newCashPost = ParseCashPost.filter((post: PostDataType) => post.id !== postID)
-                localStorage.setItem("UserPosts", JSON.stringify(newCashPost))
+                const newCashPost: PostDataType[] = ParseCashPost.filter((post: PostDataType) => post.id !== postID)
+                newCashPost.length <= 0 ? localStorage.removeItem("UserPosts") : localStorage.setItem("UserPosts", JSON.stringify(newCashPost))
+
             }
-
-        } catch (err) {
+        }).catch((err: any) => {
             console.log(err);
+            toast.error(err?.response?.data?.error) ?? "Error while deleting post"
+        }).finally(() => {
+            setbtnDeletPost(false)
+        })
+        // try {
+        //     const data = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${postID}`, { headers })
+        //     console.log(data);
+        //     dispath(RemovePostFromUserPosts(postID))
+        //     const localCashPost = localStorage.getItem("UserPosts")
+        //     if (localCashPost) {
+        //         const ParseCashPost = JSON.parse(localCashPost)
+        //         const newCashPost = ParseCashPost.filter((post: PostDataType) => post.id !== postID)
+        //         localStorage.setItem("UserPosts", JSON.stringify(newCashPost))
+        //     }
 
-        }
+        // } catch (err) {
+        //     console.log(err);
+
+        // }
     }
     const handleDelete = async (postID: number) => {
         if (!btnDeletPost) {
-            const WaitingDelete = toast.loading("Wait to delete post ..")
+            // const WaitingDelete = toast.loading("Wait to delete post ..")
             setbtnDeletPost(true)
             try {
                 await DeletePost(postID);
-                toast.success("Post deleted successfully")
+                // toast.success("Post deleted successfully")
                 setOpen(false);
             } catch (err) {
                 console.log(err);
-            } finally {
-                setbtnDeletPost(false)
-                toast.dismiss(WaitingDelete)
-
             }
         }
     };

@@ -5,6 +5,7 @@ import { useParams, usePathname, useRouter } from 'next/navigation'
 import { ChangeUserToken, ChangeUserData, ChangeUserLoading, logOut, ChangeCashPosts } from '@/lib/UserSlices'
 import SpinnerLoader from '../SpinnerLoader/page'
 import { toast } from 'react-toastify'
+import { PostDataType } from '../../../../InterFaces/StateProfileSlices'
 
 export default function ProtectRouting({ children }: any) {
     const Router = useRouter()
@@ -20,9 +21,10 @@ export default function ProtectRouting({ children }: any) {
         const localPosts = localStorage.getItem("UserPosts");
 
         if (localPosts) {
-            dispatch(ChangeCashPosts(JSON.parse(localPosts)))
+            const parsedPosts: PostDataType[] = JSON.parse(localPosts);
+            parsedPosts.length <= 0 ? localStorage.removeItem("UserPosts") : dispatch(ChangeCashPosts(JSON.parse(localPosts)))
         } else {
-
+            //empty 
         }
 
         if (localToken == "null") {

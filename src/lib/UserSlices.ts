@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { StateUserSlices } from "../../InterFaces/StateUserSlices";
 import { toast } from "react-toastify";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { PostDataType } from "../../InterFaces/StateProfileSlices";
 
 const initialState: StateUserSlices = {
   UserToken: null,
@@ -60,6 +61,7 @@ const UserSlices = createSlice({
           return post.id !== action.payload;
         }
       );
+
       state.UserPosts = newUserPosts;
     },
     Logging: (state, action) => {
