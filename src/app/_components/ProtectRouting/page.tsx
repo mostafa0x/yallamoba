@@ -13,55 +13,15 @@ export default function ProtectRouting({ children }: any) {
     const { UserToken, UserData, UserLoading } = useSelector((state: StateFaces) => state.UserReducer)
     const dispatch = useDispatch()
 
-    // useEffect(() => {
-    //     const localToken = localStorage.getItem("UserToken");
-    //     const localData = localStorage.getItem("UserData");
 
-    //     if (localToken) {
-    //         dispatch(ChangeUserLoading(true));
-    //         dispatch(ChangeUserToken(localToken));
-
-    //         if (localData) {
-    //             try {
-    //                 const userDataJSON = JSON.parse(localData);
-    //                 dispatch(ChangeUserData(userDataJSON));
-    //             } catch (error) {
-    //                 console.error("Failed to parse user data:", error);
-    //             }
-    //         }
-
-    //         dispatch(ChangeUserLoading(false));
-    //     }
-    //     if (!localToken) {
-    //         dispatch(ChangeUserLoading(false));
-
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     function FakeData(e: KeyboardEvent) {
-    //         if (e.key == "e") {
-    //             localStorage.setItem("UserData", "null")
-    //             localStorage.setItem("UserToken", "null")
-    //         }
-    //     }
-    //     addEventListener("keydown", FakeData)
-
-    //     return () => {
-    //         removeEventListener("keydown", FakeData)
-    //     }
-    // }, [])
     useEffect(() => {
         const localToken = localStorage.getItem("UserToken");
         const localData = localStorage.getItem("UserData");
         const localPosts = localStorage.getItem("UserPosts");
-        console.log("m,m,");
 
         if (localPosts) {
-            console.log("xx");
             dispatch(ChangeCashPosts(JSON.parse(localPosts)))
         } else {
-            console.log("xxhjhj");
 
         }
 
@@ -79,7 +39,6 @@ export default function ProtectRouting({ children }: any) {
             if (localData) {
                 if (localData == "null") {
                     dispatch(logOut(null))
-
                     return
                 }
                 try {
@@ -101,9 +60,7 @@ export default function ProtectRouting({ children }: any) {
             localStorage.removeItem("UserToken")
             localStorage.removeItem("UserData")
             localStorage.removeItem("UserPosts")
-
             dispatch(ChangeUserLoading(false));
-
         }
 
         if (localToken) {
@@ -124,7 +81,6 @@ export default function ProtectRouting({ children }: any) {
         if (Path === "/signup" || Path === "/signin") {
             if (localToken) {
                 Router.push("/")
-
             }
         }
 

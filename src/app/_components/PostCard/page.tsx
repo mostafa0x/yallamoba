@@ -38,6 +38,13 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
             const data = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${postID}`, { headers })
             console.log(data);
             dispath(RemovePostFromUserPosts(postID))
+            const localCashPost = localStorage.getItem("UserPosts")
+            if (localCashPost) {
+                const ParseCashPost = JSON.parse(localCashPost)
+                const newCashPost = ParseCashPost.filter((post: PostDataType) => post.id !== postID)
+                localStorage.setItem("UserPosts", JSON.stringify(newCashPost))
+            }
+
         } catch (err) {
             console.log(err);
 
@@ -153,7 +160,7 @@ export default function PostCard({ OwnerData, Post, myData, myProfile
                                             className="w-full max-h-[500px] rounded"
                                         >
                                             <source src={fileUrl} type={`video/${extension}`} />
-                                            المتصفح لا يدعم تشغيل هذا الفيديو.
+                                            Not supported video
                                         </video>
                                     )}
                                 </div>

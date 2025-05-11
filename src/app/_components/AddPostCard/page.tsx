@@ -29,20 +29,24 @@ export default function AddPostCard({ toggleAddPostModal }: any) {
     async function ReqAddPost(fromdata: any) {
         console.log(fromdata);
         setbtnPostLoading(true)
-        try {
-            const data = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`, fromdata, { headers })
+        toast.promise(axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`, fromdata, { headers }), {
+            pending: "Waiting Adding Post ...",
+            success: "The post has been added successfully",
+            error: {
+                render({ data }: any) {
+                    return data?.response?.data?.error || "Registration failed";
+                },
+            },
+        }).then((data: any) => {
             dispath(AddToUserPosts(data.data.newPost))
-            toast.success("The post has been added successfully.")
             CashUserPosts(data.data.newPost)
             toggleAddPostModal(-1)
-        } catch (err: any) {
+        }).catch((err: any) => {
             console.log(err);
-            toast.error("Error while adding post")
-            seterrorPopup(err.response.data.error)
-
-        } finally {
+            seterrorPopup(err?.response?.data?.error) ?? "Error while adding post"
+        }).finally(() => {
             setbtnPostLoading(false)
-        }
+        })
     }
 
     function CloseErrorPopup() {
